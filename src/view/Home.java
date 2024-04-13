@@ -170,10 +170,14 @@ public class Home extends javax.swing.JFrame {
         phonePanel.add(Box.createVerticalStrut(10));
         phonePanel.add(priceLabel);
         
-        JButton buyButton = new JButton("BUY");
+        KButton buyButton = new KButton();
+        buyButton.setText("BUY");
+        buyButton.setBackground(mainColor);
+        buyButton.setkAllowGradient(false);
+        buyButton.setkBackGroundColor(mainColor);
+        buyButton.setkSelectedColor(Color.WHITE);
+        buyButton.setkHoverForeGround(Color.BLACK);
         buyButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        buyButton.setBorderPainted(false);
-        buyButton.setBackground(Color.LIGHT_GRAY);
         phonePanel.add(Box.createVerticalStrut(10));
         phonePanel.add(buyButton);
         
