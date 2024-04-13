@@ -103,11 +103,16 @@ public class Home extends javax.swing.JFrame {
         laptopPanel.add(Box.createVerticalStrut(10));
         laptopPanel.add(priceLabel);
         
-        JButton buyButton = new JButton("BUY");
+        KButton buyButton = new KButton();
+        buyButton.setText("BUY");
+        buyButton.setBackground(mainColor);
+        buyButton.setkAllowGradient(false);
+        buyButton.setkBorderRadius(30);
+        buyButton.setkBackGroundColor(mainColor);
+        buyButton.setkSelectedColor(Color.WHITE);
+        buyButton.setkHoverForeGround(Color.BLACK);
         buyButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        buyButton.setBorderPainted(false);
-        buyButton.setBackground(Color.LIGHT_GRAY);
-        laptopPanel.add(Box.createVerticalStrut(10));
+        laptopPanel.add(Box.createVerticalStrut(2));
         laptopPanel.add(buyButton);
         
         
@@ -174,6 +179,7 @@ public class Home extends javax.swing.JFrame {
         buyButton.setText("BUY");
         buyButton.setBackground(mainColor);
         buyButton.setkAllowGradient(false);
+        buyButton.setkBorderRadius(30);
         buyButton.setkBackGroundColor(mainColor);
         buyButton.setkSelectedColor(Color.WHITE);
         buyButton.setkHoverForeGround(Color.BLACK);
