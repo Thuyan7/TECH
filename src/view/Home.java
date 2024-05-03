@@ -4,19 +4,14 @@
  */
 package view;
 
+import java.sql.*;
 import DataBase.LaptopManager;
 import DataBase.PhoneManager;
-import com.formdev.flatlaf.FlatIntelliJLaf;
-import com.formdev.flatlaf.FlatLightLaf;
-import com.formdev.flatlaf.intellijthemes.FlatAllIJThemes;
-import com.formdev.flatlaf.intellijthemes.FlatArcDarkIJTheme;
-import com.formdev.flatlaf.intellijthemes.FlatGradiantoNatureGreenIJTheme;
-import com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatGitHubIJTheme;
-import com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatMaterialLighterIJTheme;
-import com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatMoonlightIJTheme;
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
 import com.k33ptoo.components.KButton;
 import com.k33ptoo.components.KGradientPanel;
+import com.mysql.cj.xdevapi.Statement;
+import com.sun.jdi.connect.spi.Connection;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -36,10 +31,12 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.Border;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -72,9 +69,6 @@ public class Home extends javax.swing.JFrame {
         laptopPanel.setkBorderRadius(100);
         laptopPanel.setBackground(Color.WHITE);
         
-        
-
-        
         ImageIcon imageIcon = new ImageIcon(laptop.getImage());
         JLabel imageLabel = new JLabel(imageIcon);
         imageLabel.setAlignmentX(Component.CENTER_ALIGNMENT); 
@@ -105,6 +99,13 @@ public class Home extends javax.swing.JFrame {
         
         KButton buyButton = new KButton();
         buyButton.setText("BUY");
+        buyButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    Buy1 detailFrame = new Buy1(laptop.getName(), laptop.getPrice());
+                    detailFrame.setVisible(true);
+                }
+            });
         buyButton.setBackground(mainColor);
         buyButton.setkAllowGradient(false);
         buyButton.setkBorderRadius(30);
@@ -112,7 +113,7 @@ public class Home extends javax.swing.JFrame {
         buyButton.setkSelectedColor(Color.WHITE);
         buyButton.setkHoverForeGround(Color.BLACK);
         buyButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        laptopPanel.add(Box.createVerticalStrut(2));
+      
         laptopPanel.add(buyButton);
         
         
@@ -144,9 +145,6 @@ public class Home extends javax.swing.JFrame {
         phonePanel.setkBorderRadius(100);
         phonePanel.setBackground(Color.WHITE);
         
-        
-
-        
         ImageIcon imageIcon = new ImageIcon(phone.getImage());
         JLabel imageLabel = new JLabel(imageIcon);
         imageLabel.setAlignmentX(Component.CENTER_ALIGNMENT); 
@@ -177,6 +175,13 @@ public class Home extends javax.swing.JFrame {
         
         KButton buyButton = new KButton();
         buyButton.setText("BUY");
+        buyButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    Buy1 detailFrame = new Buy1(phone.getName(), phone.getPrice());
+                    detailFrame.setVisible(true);
+                }
+            });
         buyButton.setBackground(mainColor);
         buyButton.setkAllowGradient(false);
         buyButton.setkBorderRadius(30);
@@ -196,6 +201,12 @@ public class Home extends javax.swing.JFrame {
     scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
     jScrollPane1.setViewportView(scrollPane);
     }
+   
+  
+
+   
+   
+  
 
 
 
@@ -215,12 +226,30 @@ public class Home extends javax.swing.JFrame {
         btLaptop = new com.k33ptoo.components.KButton();
         btPhone = new com.k33ptoo.components.KButton();
         btDaily = new com.k33ptoo.components.KButton();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
+        logOut = new javax.swing.JLabel();
+        closeMenu = new javax.swing.JLabel();
+        kGradientPanel1 = new com.k33ptoo.components.KGradientPanel();
+        menulb = new javax.swing.JLabel();
+        addProduct = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jPanel2 = new javax.swing.JPanel();
-        kGradientPanel1 = new com.k33ptoo.components.KGradientPanel();
-        jLabel2 = new javax.swing.JLabel();
+        jPanel4 = new javax.swing.JPanel();
+        dailyPanel = new javax.swing.JPanel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        dailyTable = new javax.swing.JTable();
+        jPanel3 = new javax.swing.JPanel();
+        totallb = new javax.swing.JLabel();
+        jPanel6 = new javax.swing.JPanel();
+        searchBt = new javax.swing.JButton();
+        searchtxt4 = new javax.swing.JTextField();
+        searchlb = new javax.swing.JLabel();
+        userPanel = new javax.swing.JPanel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        userTable = new javax.swing.JTable();
+        jPanel5 = new javax.swing.JPanel();
+        search = new javax.swing.JLabel();
+        searchtxt = new javax.swing.JTextField();
+        searchbt = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(255, 255, 255));
@@ -290,15 +319,25 @@ public class Home extends javax.swing.JFrame {
         btDaily.setkHoverForeGround(new java.awt.Color(0, 0, 0));
         btDaily.setkHoverStartColor(new java.awt.Color(0, 0, 0));
         btDaily.setkSelectedColor(new java.awt.Color(255, 255, 255));
-
-        jLabel1.setIcon(new javax.swing.ImageIcon("C:\\Users\\AN\\Downloads\\logout.png")); // NOI18N
-
-        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel3.setIcon(new javax.swing.ImageIcon("C:\\Users\\AN\\Downloads\\close.png")); // NOI18N
-        jLabel3.setToolTipText("X");
-        jLabel3.addMouseListener(new java.awt.event.MouseAdapter() {
+        btDaily.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jLabel3MouseClicked(evt);
+                btDailyMouseClicked(evt);
+            }
+        });
+        btDaily.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btDailyActionPerformed(evt);
+            }
+        });
+
+        logOut.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/logout.png"))); // NOI18N
+
+        closeMenu.setForeground(new java.awt.Color(255, 255, 255));
+        closeMenu.setIcon(new javax.swing.ImageIcon("C:\\Users\\AN\\Downloads\\close.png")); // NOI18N
+        closeMenu.setToolTipText("X");
+        closeMenu.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                closeMenuMouseClicked(evt);
             }
         });
 
@@ -310,7 +349,7 @@ public class Home extends javax.swing.JFrame {
                 .addGroup(MenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, MenuLayout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jLabel3))
+                        .addComponent(closeMenu))
                     .addComponent(btPhone, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addGroup(MenuLayout.createSequentialGroup()
                         .addContainerGap()
@@ -323,14 +362,14 @@ public class Home extends javax.swing.JFrame {
                 .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, MenuLayout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(logOut, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(71, 71, 71))
         );
         MenuLayout.setVerticalGroup(
             MenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(MenuLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(closeMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(161, 161, 161)
                 .addComponent(btLaptop, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(41, 41, 41)
@@ -340,35 +379,165 @@ public class Home extends javax.swing.JFrame {
                 .addGap(41, 41, 41)
                 .addComponent(btCustomer, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 240, Short.MAX_VALUE)
-                .addComponent(jLabel1)
+                .addComponent(logOut)
                 .addGap(40, 40, 40))
         );
 
         jPanel1.add(Menu, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 0, -1));
+
+        kGradientPanel1.setkEndColor(new java.awt.Color(51, 153, 255));
+        kGradientPanel1.setkStartColor(new java.awt.Color(255, 255, 255));
+        kGradientPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        menulb.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/list.png"))); // NOI18N
+        menulb.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                menulbMouseClicked(evt);
+            }
+        });
+        kGradientPanel1.add(menulb, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 12, 40, 40));
+
+        addProduct.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/add.png"))); // NOI18N
+        addProduct.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                addProductMouseClicked(evt);
+            }
+        });
+        kGradientPanel1.add(addProduct, new org.netbeans.lib.awtextra.AbsoluteConstraints(980, 10, 40, 40));
+
+        jPanel1.add(kGradientPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1050, 60));
 
         jScrollPane1.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         jScrollPane1.setToolTipText("");
         jScrollPane1.setAlignmentX(1.0F);
         jScrollPane1.setAlignmentY(1.0F);
 
-        jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel2.setLayout(new java.awt.CardLayout());
+
+        jPanel4.setBackground(new java.awt.Color(255, 255, 255));
+
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 1050, Short.MAX_VALUE)
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 700, Short.MAX_VALUE)
+        );
+
+        jPanel2.add(jPanel4, "card3");
+
+        dailyPanel.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        dailyTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane2.setViewportView(dailyTable);
+
+        dailyPanel.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 80, 1050, 490));
+
+        jPanel3.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        totallb.setText("TOTAL:");
+        jPanel3.add(totallb, new org.netbeans.lib.awtextra.AbsoluteConstraints(18, 30, 60, -1));
+
+        dailyPanel.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 570, 1050, 80));
+
+        jPanel6.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel6.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        searchBt.setText("Search");
+        jPanel6.add(searchBt, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 23, -1, 30));
+        jPanel6.add(searchtxt4, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 22, 240, 30));
+
+        searchlb.setText("Search:");
+        jPanel6.add(searchlb, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 30, -1, -1));
+
+        dailyPanel.add(jPanel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1050, 80));
+
+        jPanel2.add(dailyPanel, "card2");
+
+        userPanel.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        userTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane3.setViewportView(userTable);
+
+        userPanel.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 80, 1050, 620));
+
+        search.setText("Search");
+
+        searchbt.setText("SEARCH");
+
+        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
+        jPanel5.setLayout(jPanel5Layout);
+        jPanel5Layout.setHorizontalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 1050, Short.MAX_VALUE)
+            .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel5Layout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(search)
+                    .addGap(0, 0, Short.MAX_VALUE)))
+            .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel5Layout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(searchtxt, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 0, Short.MAX_VALUE)))
+            .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel5Layout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(searchbt)
+                    .addGap(0, 0, Short.MAX_VALUE)))
+        );
+        jPanel5Layout.setVerticalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 80, Short.MAX_VALUE)
+            .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel5Layout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(search)
+                    .addGap(0, 0, Short.MAX_VALUE)))
+            .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel5Layout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(searchtxt, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 0, Short.MAX_VALUE)))
+            .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel5Layout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(searchbt)
+                    .addGap(0, 0, Short.MAX_VALUE)))
+        );
+
+        userPanel.add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1050, 80));
+
+        jPanel2.add(userPanel, "card2");
+
         jScrollPane1.setViewportView(jPanel2);
 
         jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 60, 1050, 660));
-
-        kGradientPanel1.setkEndColor(new java.awt.Color(51, 153, 255));
-        kGradientPanel1.setkStartColor(new java.awt.Color(255, 255, 255));
-        kGradientPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        jLabel2.setIcon(new javax.swing.ImageIcon("C:\\Users\\AN\\Downloads\\list.png")); // NOI18N
-        jLabel2.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jLabel2MouseClicked(evt);
-            }
-        });
-        kGradientPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 12, 90, 40));
-
-        jPanel1.add(kGradientPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1050, 60));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -382,19 +551,22 @@ public class Home extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void btCustomerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btCustomerActionPerformed
-        // TODO add your handling code here:
+       dailyPanel.setVisible(false);
+       jPanel4.setVisible(false);
+       userPanel.setVisible(true);
     }//GEN-LAST:event_btCustomerActionPerformed
 
-    private void jLabel2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel2MouseClicked
+    private void menulbMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_menulbMouseClicked
         openMenuBar();
-    }//GEN-LAST:event_jLabel2MouseClicked
+    }//GEN-LAST:event_menulbMouseClicked
 
-    private void jLabel3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel3MouseClicked
+    private void closeMenuMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_closeMenuMouseClicked
         closeMenuBar();
-    }//GEN-LAST:event_jLabel3MouseClicked
+    }//GEN-LAST:event_closeMenuMouseClicked
 
     private void btLaptopActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btLaptopActionPerformed
         // TODO add your handling code here:
@@ -407,6 +579,20 @@ public class Home extends javax.swing.JFrame {
     private void btPhoneMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btPhoneMouseClicked
         displayPhone();
     }//GEN-LAST:event_btPhoneMouseClicked
+
+    private void addProductMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_addProductMouseClicked
+       AddProduct aP = new AddProduct();
+       aP.setVisible(true);
+    }//GEN-LAST:event_addProductMouseClicked
+
+    private void btDailyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btDailyActionPerformed
+       dailyPanel.setVisible(true);
+       jPanel4.setVisible(false);
+        
+    }//GEN-LAST:event_btDailyActionPerformed
+
+    private void btDailyMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btDailyMouseClicked
+    }//GEN-LAST:event_btDailyMouseClicked
    
 
   
@@ -448,21 +634,39 @@ public class Home extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.k33ptoo.components.KGradientPanel Menu;
+    private javax.swing.JLabel addProduct;
     private com.k33ptoo.components.KButton btCustomer;
     private com.k33ptoo.components.KButton btDaily;
     private com.k33ptoo.components.KButton btLaptop;
     private com.k33ptoo.components.KButton btPhone;
+    private javax.swing.JLabel closeMenu;
+    private javax.swing.JPanel dailyPanel;
+    private javax.swing.JTable dailyTable;
     private com.formdev.flatlaf.ui.FlatMenuUI flatMenuUI1;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel6;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private com.k33ptoo.components.KGradientPanel kGradientPanel1;
+    private javax.swing.JLabel logOut;
+    private javax.swing.JLabel menulb;
+    private javax.swing.JLabel search;
+    private javax.swing.JButton searchBt;
+    private javax.swing.JButton searchbt;
+    private javax.swing.JLabel searchlb;
+    private javax.swing.JTextField searchtxt;
+    private javax.swing.JTextField searchtxt4;
+    private javax.swing.JLabel totallb;
+    private javax.swing.JPanel userPanel;
+    private javax.swing.JTable userTable;
     // End of variables declaration//GEN-END:variables
     
-    int width = 190;
+int width = 190;
     int height = 740;
     void openMenuBar() {
         new Thread(new Runnable() {
@@ -497,6 +701,5 @@ public class Home extends javax.swing.JFrame {
             }
         }).start();       
     }
-    
     
 }

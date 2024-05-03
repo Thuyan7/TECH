@@ -37,5 +37,25 @@ public class LaptopManager {
         } catch (Exception e) {
         }
         return laptopList;
-    } 
+    }
+    
+     public static void addLaptop(String name, String price, String des, String img) {
+        try {
+            Connection conn = DatabaseConnection.getConnection();
+            String sql = "INSERT INTO laptop (name, price, description, image) VALUES (?, ?, ?, ?)";
+            PreparedStatement statement = conn.prepareStatement(sql);
+            statement.setString(1, name);
+            statement.setString(2, price);
+            statement.setString(3, des);
+            statement.setString(4, img);
+
+            int rowsInserted = statement.executeUpdate();
+            if (rowsInserted > 0) {
+                System.out.println("A new laptop was inserted successfully!");
+            }
+            DatabaseConnection.closeConnection(conn);
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
 }
