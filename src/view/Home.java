@@ -12,6 +12,7 @@ import com.k33ptoo.components.KButton;
 import com.k33ptoo.components.KGradientPanel;
 import com.mysql.cj.xdevapi.Statement;
 import com.sun.jdi.connect.spi.Connection;
+import database.DatabaseConnection;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -32,6 +33,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.border.BevelBorder;
@@ -202,6 +204,80 @@ public class Home extends javax.swing.JFrame {
     jScrollPane1.setViewportView(scrollPane);
     }
    
+    private void displayTableFromDatabase() {
+        String sql = "SELECT * FROM daily";
+        try {
+            java.sql.Connection con= DatabaseConnection.getConnection();
+            java.sql.Statement stmt= con.createStatement();
+            ResultSet resultSet= stmt.executeQuery(sql);
+            
+            // Lấy số lượng hàng và số lượng cột của kết quả truy vấn
+            ResultSetMetaData metaData = resultSet.getMetaData();
+            int columnCount = metaData.getColumnCount();
+            
+            // Tạo một DefaultTableModel để lưu trữ dữ liệu
+            DefaultTableModel tableModel = new DefaultTableModel();
+            
+            // Thêm tên cột vào DefaultTableModel
+            for (int columnIndex = 1; columnIndex <= columnCount; columnIndex++) {
+                tableModel.addColumn(metaData.getColumnLabel(columnIndex));
+            }
+            
+            // Thêm dữ liệu từ kết quả truy vấn vào DefaultTableModel
+            while (resultSet.next()) {
+                Object[] rowData = new Object[columnCount];
+                for (int i = 0; i < columnCount; i++) {
+                    rowData[i] = resultSet.getObject(i + 1);
+                }
+                tableModel.addRow(rowData);
+            }
+            
+            // Tạo một JTable với DefaultTableModel
+            JTable table = new JTable(tableModel);
+            
+            // Đặt JTable vào JScrollPane
+            JScrollPane scrollPane = new JScrollPane(table);
+            
+            // Đặt thuộc tính cho JScrollPane
+            scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+            
+            // Thêm JScrollPane vào JScrollPane1
+            jScrollPane1.setViewportView(scrollPane);
+            
+            // Tính tổng giá của các mục trong bảng
+            double totalPrice = 0.0;
+            for (int row = 0; row < table.getRowCount(); row++) {
+                Object priceObject = table.getValueAt(row, columnCount - 1); // Giả sử cột cuối cùng là cột giá
+                if (priceObject instanceof Double) {
+                    totalPrice += (double) priceObject;
+                } else if (priceObject instanceof String) {
+                    try {
+                        totalPrice += Double.parseDouble((String) priceObject);
+                    } catch (NumberFormatException e) {
+                        // Xử lý ngoại lệ nếu giá trị không thể chuyển đổi thành số
+                        e.printStackTrace();
+                    }
+                }
+            }
+            
+            // Hiển thị tổng giá ở dưới bảng
+            JLabel totalLabel = new JLabel("Total Price: $" + totalPrice);
+            totalLabel.setHorizontalAlignment(SwingConstants.CENTER);
+            jScrollPane1.setColumnHeaderView(totalLabel);
+            
+            // Đóng kết nối đến cơ sở dữ liệu
+            resultSet.close();
+            stmt.close();
+            con.close();
+            
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+ 
+   
+
+   
   
 
    
@@ -233,23 +309,6 @@ public class Home extends javax.swing.JFrame {
         addProduct = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jPanel2 = new javax.swing.JPanel();
-        jPanel4 = new javax.swing.JPanel();
-        dailyPanel = new javax.swing.JPanel();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        dailyTable = new javax.swing.JTable();
-        jPanel3 = new javax.swing.JPanel();
-        totallb = new javax.swing.JLabel();
-        jPanel6 = new javax.swing.JPanel();
-        searchBt = new javax.swing.JButton();
-        searchtxt4 = new javax.swing.JTextField();
-        searchlb = new javax.swing.JLabel();
-        userPanel = new javax.swing.JPanel();
-        jScrollPane3 = new javax.swing.JScrollPane();
-        userTable = new javax.swing.JTable();
-        jPanel5 = new javax.swing.JPanel();
-        search = new javax.swing.JLabel();
-        searchtxt = new javax.swing.JTextField();
-        searchbt = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(255, 255, 255));
@@ -413,127 +472,17 @@ public class Home extends javax.swing.JFrame {
         jScrollPane1.setAlignmentY(1.0F);
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel2.setLayout(new java.awt.CardLayout());
 
-        jPanel4.setBackground(new java.awt.Color(255, 255, 255));
-
-        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
-        jPanel4.setLayout(jPanel4Layout);
-        jPanel4Layout.setHorizontalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1050, Short.MAX_VALUE)
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 1048, Short.MAX_VALUE)
         );
-        jPanel4Layout.setVerticalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 700, Short.MAX_VALUE)
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 658, Short.MAX_VALUE)
         );
-
-        jPanel2.add(jPanel4, "card3");
-
-        dailyPanel.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        dailyTable.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
-        jScrollPane2.setViewportView(dailyTable);
-
-        dailyPanel.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 80, 1050, 490));
-
-        jPanel3.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        totallb.setText("TOTAL:");
-        jPanel3.add(totallb, new org.netbeans.lib.awtextra.AbsoluteConstraints(18, 30, 60, -1));
-
-        dailyPanel.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 570, 1050, 80));
-
-        jPanel6.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel6.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        searchBt.setText("Search");
-        jPanel6.add(searchBt, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 23, -1, 30));
-        jPanel6.add(searchtxt4, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 22, 240, 30));
-
-        searchlb.setText("Search:");
-        jPanel6.add(searchlb, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 30, -1, -1));
-
-        dailyPanel.add(jPanel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1050, 80));
-
-        jPanel2.add(dailyPanel, "card2");
-
-        userPanel.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        userTable.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
-        jScrollPane3.setViewportView(userTable);
-
-        userPanel.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 80, 1050, 620));
-
-        search.setText("Search");
-
-        searchbt.setText("SEARCH");
-
-        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
-        jPanel5.setLayout(jPanel5Layout);
-        jPanel5Layout.setHorizontalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1050, Short.MAX_VALUE)
-            .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel5Layout.createSequentialGroup()
-                    .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(search)
-                    .addGap(0, 0, Short.MAX_VALUE)))
-            .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel5Layout.createSequentialGroup()
-                    .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(searchtxt, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 0, Short.MAX_VALUE)))
-            .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel5Layout.createSequentialGroup()
-                    .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(searchbt)
-                    .addGap(0, 0, Short.MAX_VALUE)))
-        );
-        jPanel5Layout.setVerticalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 80, Short.MAX_VALUE)
-            .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel5Layout.createSequentialGroup()
-                    .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(search)
-                    .addGap(0, 0, Short.MAX_VALUE)))
-            .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel5Layout.createSequentialGroup()
-                    .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(searchtxt, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 0, Short.MAX_VALUE)))
-            .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel5Layout.createSequentialGroup()
-                    .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(searchbt)
-                    .addGap(0, 0, Short.MAX_VALUE)))
-        );
-
-        userPanel.add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1050, 80));
-
-        jPanel2.add(userPanel, "card2");
 
         jScrollPane1.setViewportView(jPanel2);
 
@@ -555,9 +504,7 @@ public class Home extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btCustomerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btCustomerActionPerformed
-       dailyPanel.setVisible(false);
-       jPanel4.setVisible(false);
-       userPanel.setVisible(true);
+      
     }//GEN-LAST:event_btCustomerActionPerformed
 
     private void menulbMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_menulbMouseClicked
@@ -586,8 +533,7 @@ public class Home extends javax.swing.JFrame {
     }//GEN-LAST:event_addProductMouseClicked
 
     private void btDailyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btDailyActionPerformed
-       dailyPanel.setVisible(true);
-       jPanel4.setVisible(false);
+       displayTableFromDatabase();
         
     }//GEN-LAST:event_btDailyActionPerformed
 
@@ -640,30 +586,13 @@ public class Home extends javax.swing.JFrame {
     private com.k33ptoo.components.KButton btLaptop;
     private com.k33ptoo.components.KButton btPhone;
     private javax.swing.JLabel closeMenu;
-    private javax.swing.JPanel dailyPanel;
-    private javax.swing.JTable dailyTable;
     private com.formdev.flatlaf.ui.FlatMenuUI flatMenuUI1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel4;
-    private javax.swing.JPanel jPanel5;
-    private javax.swing.JPanel jPanel6;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JScrollPane jScrollPane3;
     private com.k33ptoo.components.KGradientPanel kGradientPanel1;
     private javax.swing.JLabel logOut;
     private javax.swing.JLabel menulb;
-    private javax.swing.JLabel search;
-    private javax.swing.JButton searchBt;
-    private javax.swing.JButton searchbt;
-    private javax.swing.JLabel searchlb;
-    private javax.swing.JTextField searchtxt;
-    private javax.swing.JTextField searchtxt4;
-    private javax.swing.JLabel totallb;
-    private javax.swing.JPanel userPanel;
-    private javax.swing.JTable userTable;
     // End of variables declaration//GEN-END:variables
     
 int width = 190;
