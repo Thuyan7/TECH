@@ -34,6 +34,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.border.BevelBorder;
@@ -303,10 +304,11 @@ public class Home extends javax.swing.JFrame {
         btPhone = new com.k33ptoo.components.KButton();
         btDaily = new com.k33ptoo.components.KButton();
         logOut = new javax.swing.JLabel();
-        closeMenu = new javax.swing.JLabel();
         kGradientPanel1 = new com.k33ptoo.components.KGradientPanel();
-        menulb = new javax.swing.JLabel();
-        addProduct = new javax.swing.JLabel();
+        settingbt = new javax.swing.JLabel();
+        setting = new com.k33ptoo.components.KGradientPanel();
+        add = new javax.swing.JLabel();
+        remove = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jPanel2 = new javax.swing.JPanel();
 
@@ -317,7 +319,7 @@ public class Home extends javax.swing.JFrame {
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         Menu.setBackground(new java.awt.Color(255, 255, 255));
-        Menu.setkBorderRadius(20);
+        Menu.setkBorderRadius(70);
         Menu.setkEndColor(new java.awt.Color(51, 153, 255));
         Menu.setkStartColor(new java.awt.Color(51, 153, 255));
         Menu.setPreferredSize(new java.awt.Dimension(190, 740));
@@ -391,80 +393,86 @@ public class Home extends javax.swing.JFrame {
 
         logOut.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/logout.png"))); // NOI18N
 
-        closeMenu.setForeground(new java.awt.Color(255, 255, 255));
-        closeMenu.setIcon(new javax.swing.ImageIcon("C:\\Users\\AN\\Downloads\\close.png")); // NOI18N
-        closeMenu.setToolTipText("X");
-        closeMenu.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                closeMenuMouseClicked(evt);
-            }
-        });
-
         javax.swing.GroupLayout MenuLayout = new javax.swing.GroupLayout(Menu);
         Menu.setLayout(MenuLayout);
         MenuLayout.setHorizontalGroup(
             MenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(MenuLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(MenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, MenuLayout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(closeMenu))
-                    .addComponent(btPhone, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addGroup(MenuLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(MenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btCustomer, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                            .addComponent(btDaily, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                            .addGroup(MenuLayout.createSequentialGroup()
-                                .addComponent(btLaptop, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, Short.MAX_VALUE)))))
-                .addContainerGap())
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, MenuLayout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(logOut, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(71, 71, 71))
+                        .addGroup(MenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(btCustomer, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btDaily, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btLaptop, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btPhone, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addContainerGap())
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, MenuLayout.createSequentialGroup()
+                        .addComponent(logOut)
+                        .addGap(82, 82, 82))))
         );
         MenuLayout.setVerticalGroup(
             MenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(MenuLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(closeMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(161, 161, 161)
+                .addGap(200, 200, 200)
                 .addComponent(btLaptop, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(41, 41, 41)
+                .addGap(45, 45, 45)
                 .addComponent(btPhone, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(41, 41, 41)
+                .addGap(45, 45, 45)
                 .addComponent(btDaily, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(41, 41, 41)
+                .addGap(45, 45, 45)
                 .addComponent(btCustomer, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 240, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 200, Short.MAX_VALUE)
                 .addComponent(logOut)
-                .addGap(40, 40, 40))
+                .addGap(50, 50, 50))
         );
 
-        jPanel1.add(Menu, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 0, -1));
+        jPanel1.add(Menu, new org.netbeans.lib.awtextra.AbsoluteConstraints(-20, 0, 220, 720));
 
         kGradientPanel1.setkEndColor(new java.awt.Color(51, 153, 255));
         kGradientPanel1.setkStartColor(new java.awt.Color(255, 255, 255));
         kGradientPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        menulb.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/list.png"))); // NOI18N
-        menulb.addMouseListener(new java.awt.event.MouseAdapter() {
+        settingbt.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/settings (2).png"))); // NOI18N
+        settingbt.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                menulbMouseClicked(evt);
+                settingbtMouseClicked(evt);
             }
         });
-        kGradientPanel1.add(menulb, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 12, 40, 40));
+        kGradientPanel1.add(settingbt, new org.netbeans.lib.awtextra.AbsoluteConstraints(1000, 10, 40, 40));
 
-        addProduct.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/add.png"))); // NOI18N
-        addProduct.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                addProductMouseClicked(evt);
-            }
-        });
-        kGradientPanel1.add(addProduct, new org.netbeans.lib.awtextra.AbsoluteConstraints(980, 10, 40, 40));
+        setting.setkBorderRadius(0);
+        setting.setkEndColor(new java.awt.Color(51, 153, 255));
+        setting.setkStartColor(new java.awt.Color(51, 153, 255));
+        setting.setkTransparentControls(false);
 
-        jPanel1.add(kGradientPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1050, 60));
+        add.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/plus.png"))); // NOI18N
+
+        remove.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/minus.png"))); // NOI18N
+
+        javax.swing.GroupLayout settingLayout = new javax.swing.GroupLayout(setting);
+        setting.setLayout(settingLayout);
+        settingLayout.setHorizontalGroup(
+            settingLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, settingLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(remove, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(add)
+                .addContainerGap())
+        );
+        settingLayout.setVerticalGroup(
+            settingLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, settingLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(add, javax.swing.GroupLayout.DEFAULT_SIZE, 48, Short.MAX_VALUE)
+                .addContainerGap())
+            .addComponent(remove, javax.swing.GroupLayout.DEFAULT_SIZE, 60, Short.MAX_VALUE)
+        );
+
+        kGradientPanel1.add(setting, new org.netbeans.lib.awtextra.AbsoluteConstraints(970, 0, 0, 60));
+
+        jPanel1.add(kGradientPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 0, 1060, 60));
 
         jScrollPane1.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         jScrollPane1.setToolTipText("");
@@ -477,16 +485,16 @@ public class Home extends javax.swing.JFrame {
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1048, Short.MAX_VALUE)
+            .addGap(0, 1078, Short.MAX_VALUE)
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 658, Short.MAX_VALUE)
+            .addGap(0, 752, Short.MAX_VALUE)
         );
 
         jScrollPane1.setViewportView(jPanel2);
 
-        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 60, 1050, 660));
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 60, 1060, 660));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -507,14 +515,6 @@ public class Home extends javax.swing.JFrame {
       
     }//GEN-LAST:event_btCustomerActionPerformed
 
-    private void menulbMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_menulbMouseClicked
-        openMenuBar();
-    }//GEN-LAST:event_menulbMouseClicked
-
-    private void closeMenuMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_closeMenuMouseClicked
-        closeMenuBar();
-    }//GEN-LAST:event_closeMenuMouseClicked
-
     private void btLaptopActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btLaptopActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btLaptopActionPerformed
@@ -527,11 +527,6 @@ public class Home extends javax.swing.JFrame {
         displayPhone();
     }//GEN-LAST:event_btPhoneMouseClicked
 
-    private void addProductMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_addProductMouseClicked
-       AddProduct aP = new AddProduct();
-       aP.setVisible(true);
-    }//GEN-LAST:event_addProductMouseClicked
-
     private void btDailyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btDailyActionPerformed
        displayTableFromDatabase();
         
@@ -539,6 +534,10 @@ public class Home extends javax.swing.JFrame {
 
     private void btDailyMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btDailyMouseClicked
     }//GEN-LAST:event_btDailyMouseClicked
+
+    private void settingbtMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_settingbtMouseClicked
+       openSettingBar();
+    }//GEN-LAST:event_settingbtMouseClicked
    
 
   
@@ -580,55 +579,42 @@ public class Home extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.k33ptoo.components.KGradientPanel Menu;
-    private javax.swing.JLabel addProduct;
+    private javax.swing.JLabel add;
     private com.k33ptoo.components.KButton btCustomer;
     private com.k33ptoo.components.KButton btDaily;
     private com.k33ptoo.components.KButton btLaptop;
     private com.k33ptoo.components.KButton btPhone;
-    private javax.swing.JLabel closeMenu;
     private com.formdev.flatlaf.ui.FlatMenuUI flatMenuUI1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private com.k33ptoo.components.KGradientPanel kGradientPanel1;
     private javax.swing.JLabel logOut;
-    private javax.swing.JLabel menulb;
+    private javax.swing.JLabel remove;
+    private com.k33ptoo.components.KGradientPanel setting;
+    private javax.swing.JLabel settingbt;
     // End of variables declaration//GEN-END:variables
-    
-int width = 190;
-    int height = 740;
-    void openMenuBar() {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                for (int i=0;i< width;i++){
-                    Menu.setSize(i,height);
-                    
-                    try {
-                        Thread.sleep(2);
-                    } catch (InterruptedException ex) {
-                        Logger.getLogger(Home.class.getName()).log(Level.SEVERE, null, ex);
-                    }
+int width = 100;
+int height = 60;
+
+void openSettingBar() {
+    final int initialX = 970; // Vị trí ban đầu của thanh setting theo trục x
+
+    new Thread(new Runnable() {
+        @Override
+        public void run() {
+            for (int i = width; i >= 0; i--) { // Bắt đầu từ phải và di chuyển sang trái
+                int newX = initialX - (width - i); // Tính toán vị trí mới
+                setting.setBounds(newX, setting.getY(), width - i, height); // Đặt vị trí và kích thước mới của thanh setting
+                try {
+                    Thread.sleep(2); // Tạm ngưng để tạo hiệu ứng mượt mà
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(Home.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
-        }).start();       
-    }
-    
-    void closeMenuBar() {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                for (int i=width;i>0;i--){
-                    Menu.setSize(i,height);
-                    
-                    try {
-                        Thread.sleep(2);
-                    } catch (InterruptedException ex) {
-                        Logger.getLogger(Home.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
-            }
-        }).start();       
-    }
-    
+        }
+    }).start();       
+}
+
+
 }
