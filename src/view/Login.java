@@ -1,5 +1,8 @@
 package view;
 
+import com.formdev.flatlaf.themes.FlatMacLightLaf;
+import javax.swing.JOptionPane;
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
@@ -10,7 +13,7 @@ package view;
  * @author AN
  */
 public class Login extends javax.swing.JFrame {
-
+    int attempts;
     /**
      * Creates new form Login
      */
@@ -97,12 +100,43 @@ public class Login extends javax.swing.JFrame {
         kButton1.setkPressedColor(new java.awt.Color(255, 255, 255));
         kButton1.setkSelectedColor(new java.awt.Color(255, 255, 255));
         kButton1.setkStartColor(new java.awt.Color(51, 153, 255));
+        kButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                kButton1ActionPerformed(evt);
+            }
+        });
         jPanel4.add(kButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 350, 300, 40));
 
         getContentPane().add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 0, 460, 530));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void kButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_kButton1ActionPerformed
+         String admin = "admin"; // Tên admin
+        String password = "thuyan76"; // Mật khẩu
+
+        String enteredAdmin = jTextField2.getText(); // Lấy tên admin từ ô nhập liệu
+        String enteredPassword = new String(jPasswordField1.getPassword()); // Lấy mật khẩu từ ô nhập liệu
+
+        if (enteredAdmin.equals(admin)
+                && enteredPassword.equals(password)) {
+            // if đúng thì 
+            JOptionPane.showMessageDialog(null, "Login Successful!");
+            new Home().setVisible(true);
+            dispose();
+        } else {
+            attempts++; // Tăng biến đếm số lần nhập sai
+            if (attempts >= 3) {
+                // ĐÓng nếu m nhập sai 3 
+                JOptionPane.showMessageDialog(null, "Too many failed attempts. Exiting...");
+                System.exit(0); // Đóng ứng dụng
+            } else {
+                // Chưa tận 3 lần thì thông báo ri
+                JOptionPane.showMessageDialog(null, "Incorrect admin or password. Please try again.");
+            }
+        }
+    }//GEN-LAST:event_kButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -130,7 +164,7 @@ public class Login extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-
+        FlatMacLightLaf.setup();
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {

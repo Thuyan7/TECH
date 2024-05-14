@@ -9,6 +9,5 @@ package DataBase;
  * @author AN
  */
 public class DailyStatictis {
-    
-    
+    	
 }

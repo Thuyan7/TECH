@@ -58,7 +58,7 @@ public class Buy1 extends javax.swing.JFrame {
         nameProduct = new javax.swing.JLabel();
         kButton1 = new com.k33ptoo.components.KButton();
         kButton2 = new com.k33ptoo.components.KButton();
-        jSpinner1 = new javax.swing.JSpinner();
+        quantity = new javax.swing.JSpinner();
         jLabel4 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -121,7 +121,7 @@ public class Buy1 extends javax.swing.JFrame {
             }
         });
         jPanel1.add(kButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 310, 160, -1));
-        jPanel1.add(jSpinner1, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 102, 90, 30));
+        jPanel1.add(quantity, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 102, 90, 30));
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel4.setText("Name:");
@@ -271,12 +271,12 @@ public class Buy1 extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JSpinner jSpinner1;
     private com.k33ptoo.components.KButton kButton1;
     private com.k33ptoo.components.KButton kButton2;
     private javax.swing.JLabel nameProduct;
     private javax.swing.JTextField nametxt;
     private javax.swing.JTextField phonetxt;
     private javax.swing.JLabel priceProduct;
+    private javax.swing.JSpinner quantity;
     // End of variables declaration//GEN-END:variables
 }

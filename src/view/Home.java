@@ -39,6 +39,8 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.Border;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -46,184 +48,184 @@ import javax.swing.table.DefaultTableModel;
  * @author AN
  */
 public class Home extends javax.swing.JFrame {
-    
+
     /**
      * Creates new form Kcontrols1
      */
     public Home() {
         initComponents();
     }
-    
-   private void displayLaptop() {
+
+    private void displayLaptop() {
         Color mainColor = new Color(51, 153, 255);
         LaptopManager laptopManager = new LaptopManager();
-        List<model.Laptop> laptops = laptopManager.getLaptop(); 
+        List<model.Laptop> laptops = laptopManager.getLaptop();
 
-        JPanel displayPanel = new JPanel(new GridLayout(0, 3, 120, 50)); 
+        JPanel displayPanel = new JPanel(new GridLayout(0, 3, 120, 50));
         displayPanel.setBackground(Color.WHITE);
 
         for (model.Laptop laptop : laptops) {
-        KGradientPanel laptopPanel = new KGradientPanel(); 
-        laptopPanel.setLayout(new BoxLayout(laptopPanel, BoxLayout.Y_AXIS)); 
-        laptopPanel.setPreferredSize(new Dimension(30, 250)); 
-        laptopPanel.setBackground(Color.WHITE);
-        laptopPanel.setkStartColor(mainColor);
-        laptopPanel.setkEndColor(Color.white);
-        laptopPanel.setkBorderRadius(100);
-        laptopPanel.setBackground(Color.WHITE);
-        
-        ImageIcon imageIcon = new ImageIcon(laptop.getImage());
-        JLabel imageLabel = new JLabel(imageIcon);
-        imageLabel.setAlignmentX(Component.CENTER_ALIGNMENT); 
-        laptopPanel.add(Box.createVerticalStrut(10));
-        laptopPanel.add(imageLabel);
+            KGradientPanel laptopPanel = new KGradientPanel();
+            laptopPanel.setLayout(new BoxLayout(laptopPanel, BoxLayout.Y_AXIS));
+            laptopPanel.setPreferredSize(new Dimension(30, 250));
+            laptopPanel.setBackground(Color.WHITE);
+            laptopPanel.setkStartColor(mainColor);
+            laptopPanel.setkEndColor(Color.white);
+            laptopPanel.setkBorderRadius(100);
+            laptopPanel.setBackground(Color.WHITE);
 
-        // Name
-        JLabel nameLabel = new JLabel(laptop.getName());
-        nameLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        nameLabel.setFont(new Font("Segoe UI",1,12));
-        laptopPanel.add(Box.createVerticalStrut(10));
-        laptopPanel.add(nameLabel);
+            ImageIcon imageIcon = new ImageIcon(laptop.getImage());
+            JLabel imageLabel = new JLabel(imageIcon);
+            imageLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+            laptopPanel.add(Box.createVerticalStrut(10));
+            laptopPanel.add(imageLabel);
 
-        // Description
-        JLabel descriptionLabel = new JLabel(laptop.getDescription());
-        descriptionLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        descriptionLabel.setFont(new Font("Segoe UI",1,12));
-        laptopPanel.add(Box.createVerticalStrut(10));
-        laptopPanel.add(descriptionLabel);
+            // Name
+            JLabel nameLabel = new JLabel(laptop.getName());
+            nameLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+            nameLabel.setFont(new Font("Segoe UI", 1, 12));
+            laptopPanel.add(Box.createVerticalStrut(10));
+            laptopPanel.add(nameLabel);
 
-        // Price
-        JLabel priceLabel = new JLabel(laptop.getPrice());
-        priceLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        priceLabel.setFont(new Font("Segoe UI",1,12));
-        priceLabel.setForeground(Color.red);
-        laptopPanel.add(Box.createVerticalStrut(10));
-        laptopPanel.add(priceLabel);
-        
-        KButton buyButton = new KButton();
-        buyButton.setText("BUY");
-        buyButton.addActionListener(new ActionListener() {
+            // Description
+            JLabel descriptionLabel = new JLabel(laptop.getDescription());
+            descriptionLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+            descriptionLabel.setFont(new Font("Segoe UI", 1, 12));
+            laptopPanel.add(Box.createVerticalStrut(10));
+            laptopPanel.add(descriptionLabel);
+
+            // Price
+            JLabel priceLabel = new JLabel(laptop.getPrice());
+            priceLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+            priceLabel.setFont(new Font("Segoe UI", 1, 12));
+            priceLabel.setForeground(Color.red);
+            laptopPanel.add(Box.createVerticalStrut(10));
+            laptopPanel.add(priceLabel);
+
+            KButton buyButton = new KButton();
+            buyButton.setText("BUY");
+            buyButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     Buy1 detailFrame = new Buy1(laptop.getName(), laptop.getPrice());
                     detailFrame.setVisible(true);
                 }
             });
-        buyButton.setBackground(mainColor);
-        buyButton.setkAllowGradient(false);
-        buyButton.setkBorderRadius(30);
-        buyButton.setkBackGroundColor(mainColor);
-        buyButton.setkSelectedColor(Color.WHITE);
-        buyButton.setkHoverForeGround(Color.BLACK);
-        buyButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-      
-        laptopPanel.add(buyButton);
-        
-        
-        displayPanel.add(laptopPanel);
+            buyButton.setBackground(mainColor);
+            buyButton.setkAllowGradient(false);
+            buyButton.setkBorderRadius(30);
+            buyButton.setkBackGroundColor(mainColor);
+            buyButton.setkSelectedColor(Color.WHITE);
+            buyButton.setkHoverForeGround(Color.BLACK);
+            buyButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+            laptopPanel.add(buyButton);
+
+            displayPanel.add(laptopPanel);
+        }
+
+        JScrollPane scrollPane = new JScrollPane(displayPanel);
+
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        jScrollPane1.setViewportView(scrollPane);
     }
 
-     JScrollPane scrollPane = new JScrollPane(displayPanel);
-    
-    scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-    jScrollPane1.setViewportView(scrollPane);
-    }
-   
-   
-   private void displayPhone() {
+    private void displayPhone() {
         Color mainColor = new Color(51, 153, 255);
         PhoneManager phoneManager = new PhoneManager();
-        List<model.Phone> phones = phoneManager.getPhone(); 
+        List<model.Phone> phones = phoneManager.getPhone();
 
-        JPanel displayPanel = new JPanel(new GridLayout(0, 3, 120, 50)); 
+        JPanel displayPanel = new JPanel(new GridLayout(0, 3, 120, 50));
         displayPanel.setBackground(Color.WHITE);
 
         for (model.Phone phone : phones) {
-        KGradientPanel phonePanel = new KGradientPanel(); 
-        phonePanel.setLayout(new BoxLayout(phonePanel, BoxLayout.Y_AXIS)); 
-        phonePanel.setPreferredSize(new Dimension(30, 250)); 
-        phonePanel.setBackground(Color.WHITE);
-        phonePanel.setkStartColor(mainColor);
-        phonePanel.setkEndColor(Color.white);
-        phonePanel.setkBorderRadius(100);
-        phonePanel.setBackground(Color.WHITE);
-        
-        ImageIcon imageIcon = new ImageIcon(phone.getImage());
-        JLabel imageLabel = new JLabel(imageIcon);
-        imageLabel.setAlignmentX(Component.CENTER_ALIGNMENT); 
-        phonePanel.add(Box.createVerticalStrut(10));
-        phonePanel.add(imageLabel);
+            KGradientPanel phonePanel = new KGradientPanel();
+            phonePanel.setLayout(new BoxLayout(phonePanel, BoxLayout.Y_AXIS));
+            phonePanel.setPreferredSize(new Dimension(30, 250));
+            phonePanel.setBackground(Color.WHITE);
+            phonePanel.setkStartColor(mainColor);
+            phonePanel.setkEndColor(Color.white);
+            phonePanel.setkBorderRadius(100);
+            phonePanel.setBackground(Color.WHITE);
 
-        // Name
-        JLabel nameLabel = new JLabel(phone.getName());
-        nameLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        nameLabel.setFont(new Font("Segoe UI",1,12));
-        phonePanel.add(Box.createVerticalStrut(10));
-        phonePanel.add(nameLabel);
+            ImageIcon imageIcon = new ImageIcon(phone.getImage());
+            JLabel imageLabel = new JLabel(imageIcon);
+            imageLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+            phonePanel.add(Box.createVerticalStrut(10));
+            phonePanel.add(imageLabel);
 
-        // Description
-        JLabel descriptionLabel = new JLabel(phone.getDescription());
-        descriptionLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        descriptionLabel.setFont(new Font("Segoe UI",1,12));
-        phonePanel.add(Box.createVerticalStrut(10));
-        phonePanel.add(descriptionLabel);
+            // Name
+            JLabel nameLabel = new JLabel(phone.getName());
+            nameLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+            nameLabel.setFont(new Font("Segoe UI", 1, 12));
+            phonePanel.add(Box.createVerticalStrut(10));
+            phonePanel.add(nameLabel);
 
-        // Price
-        JLabel priceLabel = new JLabel(phone.getPrice());
-        priceLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        priceLabel.setFont(new Font("Segoe UI",1,12));
-        priceLabel.setForeground(Color.red);
-        phonePanel.add(Box.createVerticalStrut(10));
-        phonePanel.add(priceLabel);
-        
-        KButton buyButton = new KButton();
-        buyButton.setText("BUY");
-        buyButton.addActionListener(new ActionListener() {
+            // Description
+            JLabel descriptionLabel = new JLabel(phone.getDescription());
+            descriptionLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+            descriptionLabel.setFont(new Font("Segoe UI", 1, 12));
+            phonePanel.add(Box.createVerticalStrut(10));
+            phonePanel.add(descriptionLabel);
+
+            // Price
+            JLabel priceLabel = new JLabel(phone.getPrice());
+            priceLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+            priceLabel.setFont(new Font("Segoe UI", 1, 12));
+            priceLabel.setForeground(Color.red);
+            phonePanel.add(Box.createVerticalStrut(10));
+            phonePanel.add(priceLabel);
+
+            KButton buyButton = new KButton();
+            buyButton.setText("BUY");
+            buyButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     Buy1 detailFrame = new Buy1(phone.getName(), phone.getPrice());
                     detailFrame.setVisible(true);
                 }
             });
-        buyButton.setBackground(mainColor);
-        buyButton.setkAllowGradient(false);
-        buyButton.setkBorderRadius(30);
-        buyButton.setkBackGroundColor(mainColor);
-        buyButton.setkSelectedColor(Color.WHITE);
-        buyButton.setkHoverForeGround(Color.BLACK);
-        buyButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        phonePanel.add(Box.createVerticalStrut(10));
-        phonePanel.add(buyButton);
-        
-        
-        displayPanel.add(phonePanel);
-    }
+            buyButton.setBackground(mainColor);
+            buyButton.setkAllowGradient(false);
+            buyButton.setkBorderRadius(30);
+            buyButton.setkBackGroundColor(mainColor);
+            buyButton.setkSelectedColor(Color.WHITE);
+            buyButton.setkHoverForeGround(Color.BLACK);
+            buyButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+            phonePanel.add(Box.createVerticalStrut(10));
+            phonePanel.add(buyButton);
 
-     JScrollPane scrollPane = new JScrollPane(displayPanel);
-    
-    scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-    jScrollPane1.setViewportView(scrollPane);
+            displayPanel.add(phonePanel);
+        }
+
+        JScrollPane scrollPane = new JScrollPane(displayPanel);
+
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        jScrollPane1.setViewportView(scrollPane);
     }
-   
-    private void displayTableFromDatabase() {
-        String sql = "SELECT * FROM daily";
+    
+
+
+    
+    private void displayUserTable() {
+        String sql = "SELECT * FROM user";
         try {
-            java.sql.Connection con= DatabaseConnection.getConnection();
-            java.sql.Statement stmt= con.createStatement();
-            ResultSet resultSet= stmt.executeQuery(sql);
-            
+            java.sql.Connection con = DatabaseConnection.getConnection();
+            java.sql.Statement stmt = con.createStatement();
+            ResultSet resultSet = stmt.executeQuery(sql);
+
             // Lấy số lượng hàng và số lượng cột của kết quả truy vấn
             ResultSetMetaData metaData = resultSet.getMetaData();
             int columnCount = metaData.getColumnCount();
-            
+
             // Tạo một DefaultTableModel để lưu trữ dữ liệu
             DefaultTableModel tableModel = new DefaultTableModel();
-            
+
             // Thêm tên cột vào DefaultTableModel
             for (int columnIndex = 1; columnIndex <= columnCount; columnIndex++) {
                 tableModel.addColumn(metaData.getColumnLabel(columnIndex));
             }
-            
+
             // Thêm dữ liệu từ kết quả truy vấn vào DefaultTableModel
             while (resultSet.next()) {
                 Object[] rowData = new Object[columnCount];
@@ -232,58 +234,72 @@ public class Home extends javax.swing.JFrame {
                 }
                 tableModel.addRow(rowData);
             }
-            
+
             // Tạo một JTable với DefaultTableModel
             JTable table = new JTable(tableModel);
-            
+
             // Đặt JTable vào JScrollPane
             JScrollPane scrollPane = new JScrollPane(table);
-            
+
             // Đặt thuộc tính cho JScrollPane
             scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-            
-            // Thêm JScrollPane vào JScrollPane1
+
             jScrollPane1.setViewportView(scrollPane);
-            
-            // Tính tổng giá của các mục trong bảng
-            double totalPrice = 0.0;
-            for (int row = 0; row < table.getRowCount(); row++) {
-                Object priceObject = table.getValueAt(row, columnCount - 1); // Giả sử cột cuối cùng là cột giá
-                if (priceObject instanceof Double) {
-                    totalPrice += (double) priceObject;
-                } else if (priceObject instanceof String) {
-                    try {
-                        totalPrice += Double.parseDouble((String) priceObject);
-                    } catch (NumberFormatException e) {
-                        // Xử lý ngoại lệ nếu giá trị không thể chuyển đổi thành số
-                        e.printStackTrace();
-                    }
-                }
-            }
-            
-            // Hiển thị tổng giá ở dưới bảng
-            JLabel totalLabel = new JLabel("Total Price: $" + totalPrice);
-            totalLabel.setHorizontalAlignment(SwingConstants.CENTER);
-            jScrollPane1.setColumnHeaderView(totalLabel);
-            
-            // Đóng kết nối đến cơ sở dữ liệu
-            resultSet.close();
+
             stmt.close();
             con.close();
-            
+
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
     }
- 
-   
+    private void displayDailyTable() {
+        String sql = "SELECT * FROM daily";
+        try {
+            java.sql.Connection con = DatabaseConnection.getConnection();
+            java.sql.Statement stmt = con.createStatement();
+            ResultSet resultSet = stmt.executeQuery(sql);
 
-   
-  
+            // Lấy số lượng hàng và số lượng cột của kết quả truy vấn
+            ResultSetMetaData metaData = resultSet.getMetaData();
+            int columnCount = metaData.getColumnCount();
 
-   
-   
-  
+            // Tạo một DefaultTableModel để lưu trữ dữ liệu
+            DefaultTableModel tableModel = new DefaultTableModel();
+
+            // Thêm tên cột vào DefaultTableModel
+            for (int columnIndex = 1; columnIndex <= columnCount; columnIndex++) {
+                tableModel.addColumn(metaData.getColumnLabel(columnIndex));
+            }
+
+            // Thêm dữ liệu từ kết quả truy vấn vào DefaultTableModel
+            while (resultSet.next()) {
+                Object[] rowData = new Object[columnCount];
+                for (int i = 0; i < columnCount; i++) {
+                    rowData[i] = resultSet.getObject(i + 1);
+                }
+                tableModel.addRow(rowData);
+            }
+
+            // Tạo một JTable với DefaultTableModel
+            JTable table = new JTable(tableModel);
+
+            // Đặt JTable vào JScrollPane
+            JScrollPane scrollPane = new JScrollPane(table);
+
+            // Đặt thuộc tính cho JScrollPane
+            scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+
+            jScrollPane1.setViewportView(scrollPane);
+     
+            stmt.close();
+            con.close();
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+    
 
 
 
@@ -308,7 +324,9 @@ public class Home extends javax.swing.JFrame {
         settingbt = new javax.swing.JLabel();
         setting = new com.k33ptoo.components.KGradientPanel();
         add = new javax.swing.JLabel();
-        remove = new javax.swing.JLabel();
+        closelb = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jPanel2 = new javax.swing.JPanel();
 
@@ -392,6 +410,11 @@ public class Home extends javax.swing.JFrame {
         });
 
         logOut.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/logout.png"))); // NOI18N
+        logOut.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                logOutMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout MenuLayout = new javax.swing.GroupLayout(Menu);
         Menu.setLayout(MenuLayout);
@@ -422,7 +445,7 @@ public class Home extends javax.swing.JFrame {
                 .addComponent(btDaily, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(45, 45, 45)
                 .addComponent(btCustomer, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 200, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 196, Short.MAX_VALUE)
                 .addComponent(logOut)
                 .addGap(50, 50, 50))
         );
@@ -447,27 +470,51 @@ public class Home extends javax.swing.JFrame {
         setting.setkTransparentControls(false);
 
         add.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/plus.png"))); // NOI18N
+        add.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                addMouseClicked(evt);
+            }
+        });
 
-        remove.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/minus.png"))); // NOI18N
+        closelb.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/next.png"))); // NOI18N
+        closelb.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                closelbMouseClicked(evt);
+            }
+        });
+
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/minus.png"))); // NOI18N
+
+        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/pen.png"))); // NOI18N
 
         javax.swing.GroupLayout settingLayout = new javax.swing.GroupLayout(setting);
         setting.setLayout(settingLayout);
         settingLayout.setHorizontalGroup(
             settingLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, settingLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(remove, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap()
+                .addComponent(closelb)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(add)
                 .addContainerGap())
         );
         settingLayout.setVerticalGroup(
             settingLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, settingLayout.createSequentialGroup()
+            .addGroup(settingLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(add, javax.swing.GroupLayout.DEFAULT_SIZE, 48, Short.MAX_VALUE)
+                .addGroup(settingLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(add, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, settingLayout.createSequentialGroup()
+                        .addGap(0, 7, Short.MAX_VALUE)
+                        .addComponent(closelb, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(9, 9, 9))
+                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
-            .addComponent(remove, javax.swing.GroupLayout.DEFAULT_SIZE, 60, Short.MAX_VALUE)
         );
 
         kGradientPanel1.add(setting, new org.netbeans.lib.awtextra.AbsoluteConstraints(970, 0, 0, 60));
@@ -512,7 +559,7 @@ public class Home extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btCustomerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btCustomerActionPerformed
-      
+        displayUserTable();
     }//GEN-LAST:event_btCustomerActionPerformed
 
     private void btLaptopActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btLaptopActionPerformed
@@ -528,21 +575,34 @@ public class Home extends javax.swing.JFrame {
     }//GEN-LAST:event_btPhoneMouseClicked
 
     private void btDailyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btDailyActionPerformed
-       displayTableFromDatabase();
-        
+        displayDailyTable();
+
     }//GEN-LAST:event_btDailyActionPerformed
 
     private void btDailyMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btDailyMouseClicked
     }//GEN-LAST:event_btDailyMouseClicked
 
     private void settingbtMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_settingbtMouseClicked
-       openSettingBar();
+        openSettingBar();
     }//GEN-LAST:event_settingbtMouseClicked
-   
 
-  
-    
-   public static void main(String args[]) {
+    private void closelbMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_closelbMouseClicked
+        closeSettingBar();
+    }//GEN-LAST:event_closelbMouseClicked
+
+    private void addMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_addMouseClicked
+        AddProduct addProduct = new AddProduct();
+        addProduct.setVisible(true);
+    }//GEN-LAST:event_addMouseClicked
+
+    private void logOutMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_logOutMouseClicked
+        // TODO add your handling code here:
+        Login lg = new Login();
+        lg.setVisible(true);
+        dispose();
+    }//GEN-LAST:event_logOutMouseClicked
+
+    public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -574,8 +634,7 @@ public class Home extends javax.swing.JFrame {
             }
         });
     }
-    
-    
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.k33ptoo.components.KGradientPanel Menu;
@@ -584,37 +643,57 @@ public class Home extends javax.swing.JFrame {
     private com.k33ptoo.components.KButton btDaily;
     private com.k33ptoo.components.KButton btLaptop;
     private com.k33ptoo.components.KButton btPhone;
+    private javax.swing.JLabel closelb;
     private com.formdev.flatlaf.ui.FlatMenuUI flatMenuUI1;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private com.k33ptoo.components.KGradientPanel kGradientPanel1;
     private javax.swing.JLabel logOut;
-    private javax.swing.JLabel remove;
     private com.k33ptoo.components.KGradientPanel setting;
     private javax.swing.JLabel settingbt;
     // End of variables declaration//GEN-END:variables
-int width = 100;
-int height = 60;
+int width = 180;
+    int height = 60;
 
-void openSettingBar() {
-    final int initialX = 970; // Vị trí ban đầu của thanh setting theo trục x
+    void openSettingBar() {
+        final int initialX = 970;
 
-    new Thread(new Runnable() {
-        @Override
-        public void run() {
-            for (int i = width; i >= 0; i--) { // Bắt đầu từ phải và di chuyển sang trái
-                int newX = initialX - (width - i); // Tính toán vị trí mới
-                setting.setBounds(newX, setting.getY(), width - i, height); // Đặt vị trí và kích thước mới của thanh setting
-                try {
-                    Thread.sleep(2); // Tạm ngưng để tạo hiệu ứng mượt mà
-                } catch (InterruptedException ex) {
-                    Logger.getLogger(Home.class.getName()).log(Level.SEVERE, null, ex);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                for (int i = width; i >= 0; i--) {
+                    int newX = initialX - (width - i);
+                    setting.setBounds(newX, setting.getY(), width - i, height);
+                    try {
+                        Thread.sleep(2);
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(Home.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 }
             }
-        }
-    }).start();       
-}
+        }).start();
+    }
 
+    void closeSettingBar() {
+        final int initialX = 810;
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                for (int i = 0; i < width; i++) {
+                    int newX = initialX + i;
+                    setting.setBounds(newX, setting.getY(), width - i, height);
+                    try {
+                        Thread.sleep(2);
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(Home.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }
+        }).start();
+    }
 
 }
