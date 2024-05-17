@@ -24,12 +24,13 @@ public class LaptopManager {
             ResultSet rs= stmt.executeQuery(sql);
             
             while (rs.next()) {
+                int id = rs.getInt("id");
                 String name = rs.getString("name");
                 String price = rs.getString("price");
                 String image = rs.getString("image");
                 String description = rs.getString("description"); 
 
-                Laptop laptop = new Laptop(name, price, image, description);
+                Laptop laptop = new Laptop(id,name, price, image, description);
                 laptopList.add(laptop);
             }
 
@@ -58,4 +59,33 @@ public class LaptopManager {
             ex.printStackTrace();
         }
     }
+     
+     public static void delete(Laptop l) {
+		String sql="DELETE FROM laptop WHERE id='"+l.getId()+"'";
+		try {
+			Connection con= DatabaseConnection.getConnection();
+			PreparedStatement ps= con.prepareStatement(sql);
+			ps.executeUpdate();
+			DatabaseConnection.closeConnection(con);
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		
+	}
+public static void updateLaptop(Laptop l) {
+    String sql = "UPDATE laptop SET name=?, price=?, image=?, description=? WHERE id=?";
+    try {
+        Connection con = DatabaseConnection.getConnection();
+        PreparedStatement ps = con.prepareStatement(sql);
+        ps.setString(1, l.getName());
+        ps.setString(2, l.getPrice());
+        ps.setString(3, l.getImage());
+        ps.setString(4, l.getDescription());
+        ps.setInt(5, l.getId());
+        ps.executeUpdate();
+        DatabaseConnection.closeConnection(con);
+    } catch (Exception e) {
+        e.printStackTrace(); // Handle exception
+    }
+}
 }

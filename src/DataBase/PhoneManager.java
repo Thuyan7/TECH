@@ -26,12 +26,13 @@ public class PhoneManager {
             ResultSet rs= stmt.executeQuery(sql);
             
             while (rs.next()) {
+                int id = rs.getInt("id");
                 String name = rs.getString("name");
                 String price = rs.getString("price");
                 String image = rs.getString("image");
                 String description = rs.getString("description"); 
 
-                Phone phone = new Phone(name, price, image, description);
+                Phone phone = new Phone(id,name, price, image, description);
                 phoneList.add(phone);
             }
 
@@ -60,5 +61,35 @@ public class PhoneManager {
             ex.printStackTrace();
         }
     }
+       
+           public static void delete(Phone p) {
+		String sql="DELETE FROM phone WHERE id='"+p.getId()+"'";
+		try {
+			Connection con= DatabaseConnection.getConnection();
+			PreparedStatement ps= con.prepareStatement(sql);
+			ps.executeUpdate();
+			DatabaseConnection.closeConnection(con);
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		
+	}
+       
+  public static void updatePhone(Phone p) {
+    String sql = "UPDATE phone SET name=?, price=?, image=?, description=? WHERE id=?";
+    try {
+        Connection con = DatabaseConnection.getConnection();
+        PreparedStatement ps = con.prepareStatement(sql);
+        ps.setString(1, p.getName());
+        ps.setString(2, p.getPrice());
+        ps.setString(3, p.getImage());
+        ps.setString(4, p.getDescription());
+        ps.setInt(5, p.getId());
+        ps.executeUpdate();
+        DatabaseConnection.closeConnection(con);
+    } catch (Exception e) {
+        e.printStackTrace(); // Handle exception
+    }
+}
     
 }

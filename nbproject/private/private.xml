@@ -3,11 +3,15 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/AN/OneDrive/Tài%20liệu/NetBeansProjects/TECH/src/DataBase/DailyStatictis.java</file>
-            <file>file:/C:/Users/AN/OneDrive/Tài%20liệu/NetBeansProjects/TECH/src/view/Login.java</file>
+            <file>file:/C:/Users/AN/OneDrive/Tài%20liệu/NetBeansProjects/TECH/src/model/PurchaseTableModel.java</file>
+            <file>file:/C:/Users/AN/OneDrive/Tài%20liệu/NetBeansProjects/TECH/src/purchase.xml</file>
             <file>file:/C:/Users/AN/OneDrive/Tài%20liệu/NetBeansProjects/TECH/src/view/Home.java</file>
+            <file>file:/C:/Users/AN/OneDrive/Tài%20liệu/NetBeansProjects/TECH/src/model/PurchaseXMLReader.java</file>
             <file>file:/C:/Users/AN/OneDrive/Tài%20liệu/NetBeansProjects/TECH/src/view/Buy1.java</file>
+            <file>file:/C:/Users/AN/OneDrive/Tài%20liệu/NetBeansProjects/TECH/src/model/Laptop.java</file>
+            <file>file:/C:/Users/AN/OneDrive/Tài%20liệu/NetBeansProjects/TECH/src/view/ChatClient.java</file>
             <file>file:/C:/Users/AN/OneDrive/Tài%20liệu/NetBeansProjects/TECH/src/DataBase/LaptopManager.java</file>
+            <file>file:/C:/Users/AN/OneDrive/Tài%20liệu/NetBeansProjects/TECH/src/controller/PurchaseController.java</file>
         </group>
     </open-files>
 </project-private>

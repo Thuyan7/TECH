@@ -41,6 +41,8 @@ public class Login extends javax.swing.JFrame {
         kButton1 = new com.k33ptoo.components.KButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        setFocusCycleRoot(false);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel3.setBackground(new java.awt.Color(255, 255, 255));
@@ -110,29 +112,29 @@ public class Login extends javax.swing.JFrame {
         getContentPane().add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 0, 460, 530));
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void kButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_kButton1ActionPerformed
-         String admin = "admin"; // Tên admin
-        String password = "thuyan76"; // Mật khẩu
+        String admin = "admin"; 
+        String password = "thuyan76"; 
 
-        String enteredAdmin = jTextField2.getText(); // Lấy tên admin từ ô nhập liệu
-        String enteredPassword = new String(jPasswordField1.getPassword()); // Lấy mật khẩu từ ô nhập liệu
+        String enteredAdmin = jTextField2.getText(); 
+        String enteredPassword = new String(jPasswordField1.getPassword()); 
 
         if (enteredAdmin.equals(admin)
                 && enteredPassword.equals(password)) {
-            // if đúng thì 
+            
             JOptionPane.showMessageDialog(null, "Login Successful!");
             new Home().setVisible(true);
             dispose();
         } else {
-            attempts++; // Tăng biến đếm số lần nhập sai
+            attempts++; 
             if (attempts >= 3) {
-                // ĐÓng nếu m nhập sai 3 
                 JOptionPane.showMessageDialog(null, "Too many failed attempts. Exiting...");
-                System.exit(0); // Đóng ứng dụng
+                System.exit(0); 
             } else {
-                // Chưa tận 3 lần thì thông báo ri
+               
                 JOptionPane.showMessageDialog(null, "Incorrect admin or password. Please try again.");
             }
         }
@@ -169,6 +171,7 @@ public class Login extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new Login().setVisible(true);
+               
             }
         });
     }

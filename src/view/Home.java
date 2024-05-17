@@ -12,6 +12,7 @@ import com.k33ptoo.components.KButton;
 import com.k33ptoo.components.KGradientPanel;
 import com.mysql.cj.xdevapi.Statement;
 import com.sun.jdi.connect.spi.Connection;
+import controller.PurchaseController;
 import database.DatabaseConnection;
 import java.awt.Color;
 import java.awt.Component;
@@ -21,6 +22,8 @@ import java.awt.GridLayout;
 import java.awt.dnd.DragSourceListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -30,6 +33,7 @@ import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -42,18 +46,18 @@ import javax.swing.border.Border;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
+import model.Laptop;
+import model.Phone;
+import model.PurchaseTableModel;
 
 /**
  *
  * @author AN
  */
 public class Home extends javax.swing.JFrame {
-
-    /**
-     * Creates new form Kcontrols1
-     */
     public Home() {
         initComponents();
+        displayLaptop();
     }
 
     private void displayLaptop() {
@@ -63,15 +67,23 @@ public class Home extends javax.swing.JFrame {
 
         JPanel displayPanel = new JPanel(new GridLayout(0, 3, 120, 50));
         displayPanel.setBackground(Color.WHITE);
+       
 
         for (model.Laptop laptop : laptops) {
+            final String laptopId = String.valueOf(laptop.getId());
             KGradientPanel laptopPanel = new KGradientPanel();
             laptopPanel.setLayout(new BoxLayout(laptopPanel, BoxLayout.Y_AXIS));
-            laptopPanel.setPreferredSize(new Dimension(30, 250));
+            laptopPanel.setPreferredSize(new Dimension(30, 260));
             laptopPanel.setBackground(Color.WHITE);
             laptopPanel.setkStartColor(mainColor);
             laptopPanel.setkEndColor(Color.white);
             laptopPanel.setkBorderRadius(100);
+            laptopPanel.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    id.setText(laptopId);
+                }
+            });
             laptopPanel.setBackground(Color.WHITE);
 
             ImageIcon imageIcon = new ImageIcon(laptop.getImage());
@@ -102,6 +114,7 @@ public class Home extends javax.swing.JFrame {
             laptopPanel.add(Box.createVerticalStrut(10));
             laptopPanel.add(priceLabel);
 
+            
             KButton buyButton = new KButton();
             buyButton.setText("BUY");
             buyButton.addActionListener(new ActionListener() {
@@ -117,19 +130,19 @@ public class Home extends javax.swing.JFrame {
             buyButton.setkBackGroundColor(mainColor);
             buyButton.setkSelectedColor(Color.WHITE);
             buyButton.setkHoverForeGround(Color.BLACK);
+            laptopPanel.add(Box.createVerticalStrut(10));
             buyButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 
             laptopPanel.add(buyButton);
 
             displayPanel.add(laptopPanel);
         }
-
+        
         JScrollPane scrollPane = new JScrollPane(displayPanel);
 
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         jScrollPane1.setViewportView(scrollPane);
     }
-
     private void displayPhone() {
         Color mainColor = new Color(51, 153, 255);
         PhoneManager phoneManager = new PhoneManager();
@@ -139,6 +152,7 @@ public class Home extends javax.swing.JFrame {
         displayPanel.setBackground(Color.WHITE);
 
         for (model.Phone phone : phones) {
+            final String phoneId = String.valueOf(phone.getId());
             KGradientPanel phonePanel = new KGradientPanel();
             phonePanel.setLayout(new BoxLayout(phonePanel, BoxLayout.Y_AXIS));
             phonePanel.setPreferredSize(new Dimension(30, 250));
@@ -146,7 +160,14 @@ public class Home extends javax.swing.JFrame {
             phonePanel.setkStartColor(mainColor);
             phonePanel.setkEndColor(Color.white);
             phonePanel.setkBorderRadius(100);
+            phonePanel.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    id.setText(phoneId);
+                }
+            });
             phonePanel.setBackground(Color.WHITE);
+          
 
             ImageIcon imageIcon = new ImageIcon(phone.getImage());
             JLabel imageLabel = new JLabel(imageIcon);
@@ -199,106 +220,17 @@ public class Home extends javax.swing.JFrame {
         }
 
         JScrollPane scrollPane = new JScrollPane(displayPanel);
-
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         jScrollPane1.setViewportView(scrollPane);
     }
-    
-
-
-    
-    private void displayUserTable() {
-        String sql = "SELECT * FROM user";
-        try {
-            java.sql.Connection con = DatabaseConnection.getConnection();
-            java.sql.Statement stmt = con.createStatement();
-            ResultSet resultSet = stmt.executeQuery(sql);
-
-            // Lấy số lượng hàng và số lượng cột của kết quả truy vấn
-            ResultSetMetaData metaData = resultSet.getMetaData();
-            int columnCount = metaData.getColumnCount();
-
-            // Tạo một DefaultTableModel để lưu trữ dữ liệu
-            DefaultTableModel tableModel = new DefaultTableModel();
-
-            // Thêm tên cột vào DefaultTableModel
-            for (int columnIndex = 1; columnIndex <= columnCount; columnIndex++) {
-                tableModel.addColumn(metaData.getColumnLabel(columnIndex));
-            }
-
-            // Thêm dữ liệu từ kết quả truy vấn vào DefaultTableModel
-            while (resultSet.next()) {
-                Object[] rowData = new Object[columnCount];
-                for (int i = 0; i < columnCount; i++) {
-                    rowData[i] = resultSet.getObject(i + 1);
-                }
-                tableModel.addRow(rowData);
-            }
-
-            // Tạo một JTable với DefaultTableModel
-            JTable table = new JTable(tableModel);
-
-            // Đặt JTable vào JScrollPane
+    private void displayUserTable(PurchaseController controller) {
+            PurchaseTableModel model = controller.getPurchaseTableModel();
+            JTable table = new JTable(model);
             JScrollPane scrollPane = new JScrollPane(table);
-
-            // Đặt thuộc tính cho JScrollPane
             scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-
             jScrollPane1.setViewportView(scrollPane);
-
-            stmt.close();
-            con.close();
-
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
     }
-    private void displayDailyTable() {
-        String sql = "SELECT * FROM daily";
-        try {
-            java.sql.Connection con = DatabaseConnection.getConnection();
-            java.sql.Statement stmt = con.createStatement();
-            ResultSet resultSet = stmt.executeQuery(sql);
 
-            // Lấy số lượng hàng và số lượng cột của kết quả truy vấn
-            ResultSetMetaData metaData = resultSet.getMetaData();
-            int columnCount = metaData.getColumnCount();
-
-            // Tạo một DefaultTableModel để lưu trữ dữ liệu
-            DefaultTableModel tableModel = new DefaultTableModel();
-
-            // Thêm tên cột vào DefaultTableModel
-            for (int columnIndex = 1; columnIndex <= columnCount; columnIndex++) {
-                tableModel.addColumn(metaData.getColumnLabel(columnIndex));
-            }
-
-            // Thêm dữ liệu từ kết quả truy vấn vào DefaultTableModel
-            while (resultSet.next()) {
-                Object[] rowData = new Object[columnCount];
-                for (int i = 0; i < columnCount; i++) {
-                    rowData[i] = resultSet.getObject(i + 1);
-                }
-                tableModel.addRow(rowData);
-            }
-
-            // Tạo một JTable với DefaultTableModel
-            JTable table = new JTable(tableModel);
-
-            // Đặt JTable vào JScrollPane
-            JScrollPane scrollPane = new JScrollPane(table);
-
-            // Đặt thuộc tính cho JScrollPane
-            scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-
-            jScrollPane1.setViewportView(scrollPane);
-     
-            stmt.close();
-            con.close();
-
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
-    }
     
 
 
@@ -325,8 +257,11 @@ public class Home extends javax.swing.JFrame {
         setting = new com.k33ptoo.components.KGradientPanel();
         add = new javax.swing.JLabel();
         closelb = new javax.swing.JLabel();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
+        deletelb = new javax.swing.JLabel();
+        updatelb = new javax.swing.JLabel();
+        chatlb = new javax.swing.JLabel();
+        id = new javax.swing.JTextField();
+        typetxt = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         jPanel2 = new javax.swing.JPanel();
 
@@ -483,21 +418,39 @@ public class Home extends javax.swing.JFrame {
             }
         });
 
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/minus.png"))); // NOI18N
+        deletelb.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/minus.png"))); // NOI18N
+        deletelb.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                deletelbMouseClicked(evt);
+            }
+        });
 
-        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/pen.png"))); // NOI18N
+        updatelb.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/pen.png"))); // NOI18N
+        updatelb.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                updatelbMouseClicked(evt);
+            }
+        });
+
+        chatlb.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/comment.png"))); // NOI18N
+        chatlb.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                chatlbMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout settingLayout = new javax.swing.GroupLayout(setting);
         setting.setLayout(settingLayout);
         settingLayout.setHorizontalGroup(
             settingLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, settingLayout.createSequentialGroup()
-                .addContainerGap()
                 .addComponent(closelb)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(chatlb, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(updatelb, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(deletelb, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(add)
                 .addContainerGap())
@@ -508,35 +461,40 @@ public class Home extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(settingLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(add, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(deletelb, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(updatelb, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, settingLayout.createSequentialGroup()
                         .addGap(0, 7, Short.MAX_VALUE)
-                        .addComponent(closelb, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(9, 9, 9))
-                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(settingLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, settingLayout.createSequentialGroup()
+                                .addComponent(closelb, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(9, 9, 9))
+                            .addComponent(chatlb, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap())
         );
 
         kGradientPanel1.add(setting, new org.netbeans.lib.awtextra.AbsoluteConstraints(970, 0, 0, 60));
 
+        id.setVisible(false);
+        id.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                idActionPerformed(evt);
+            }
+        });
+        kGradientPanel1.add(id, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, -1, -1));
+        kGradientPanel1.add(typetxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 20, -1, -1));
+
         jPanel1.add(kGradientPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 0, 1060, 60));
-
-        jScrollPane1.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-        jScrollPane1.setToolTipText("");
-        jScrollPane1.setAlignmentX(1.0F);
-        jScrollPane1.setAlignmentY(1.0F);
-
-        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1078, Short.MAX_VALUE)
+            .addGap(0, 1058, Short.MAX_VALUE)
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 752, Short.MAX_VALUE)
+            .addGap(0, 658, Short.MAX_VALUE)
         );
 
         jScrollPane1.setViewportView(jPanel2);
@@ -559,7 +517,7 @@ public class Home extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btCustomerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btCustomerActionPerformed
-        displayUserTable();
+        
     }//GEN-LAST:event_btCustomerActionPerformed
 
     private void btLaptopActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btLaptopActionPerformed
@@ -568,15 +526,18 @@ public class Home extends javax.swing.JFrame {
 
     private void btLaptopMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btLaptopMouseClicked
         displayLaptop();
+        typetxt.setText(btLaptop.getText());
+        
     }//GEN-LAST:event_btLaptopMouseClicked
 
     private void btPhoneMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btPhoneMouseClicked
         displayPhone();
+        typetxt.setText(btPhone.getText());
     }//GEN-LAST:event_btPhoneMouseClicked
 
     private void btDailyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btDailyActionPerformed
-        displayDailyTable();
-
+        PurchaseController controller = new PurchaseController();
+        displayUserTable(controller);
     }//GEN-LAST:event_btDailyActionPerformed
 
     private void btDailyMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btDailyMouseClicked
@@ -596,11 +557,47 @@ public class Home extends javax.swing.JFrame {
     }//GEN-LAST:event_addMouseClicked
 
     private void logOutMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_logOutMouseClicked
-        // TODO add your handling code here:
+
         Login lg = new Login();
         lg.setVisible(true);
         dispose();
     }//GEN-LAST:event_logOutMouseClicked
+
+    private void idActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_idActionPerformed
+       
+    }//GEN-LAST:event_idActionPerformed
+
+    private void deletelbMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_deletelbMouseClicked
+
+        String types = typetxt.getText();
+        if(types.equals("LAPTOP")){
+            Laptop laptops = new Laptop();
+            final int ids = Integer.valueOf(id.getText());
+            laptops.setId(ids);
+            LaptopManager.delete(laptops);
+            displayLaptop();
+        }else if(types.equals("SMARTPHONE")){
+            Phone phones = new Phone();
+            final int ids = Integer.valueOf(id.getText());
+            phones.setId(ids);
+            PhoneManager.delete(phones);
+            displayPhone();
+        }
+    }//GEN-LAST:event_deletelbMouseClicked
+
+    private void updatelbMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_updatelbMouseClicked
+        UpdateProduct update = new UpdateProduct(id.getText());
+        update.setVisible(true);
+        
+    }//GEN-LAST:event_updatelbMouseClicked
+
+    private void chatlbMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_chatlbMouseClicked
+        // TODO add your handling code here:
+        String serverAddress = "192.168.1.7";
+        String clientName = JOptionPane.showInputDialog("Nhập tên của bạn:");
+        ChatClient chats = new ChatClient(serverAddress, clientName);
+        chats.setVisible(true);
+    }//GEN-LAST:event_chatlbMouseClicked
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
@@ -643,10 +640,11 @@ public class Home extends javax.swing.JFrame {
     private com.k33ptoo.components.KButton btDaily;
     private com.k33ptoo.components.KButton btLaptop;
     private com.k33ptoo.components.KButton btPhone;
+    private javax.swing.JLabel chatlb;
     private javax.swing.JLabel closelb;
+    private javax.swing.JLabel deletelb;
     private com.formdev.flatlaf.ui.FlatMenuUI flatMenuUI1;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
+    private javax.swing.JTextField id;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
@@ -654,8 +652,10 @@ public class Home extends javax.swing.JFrame {
     private javax.swing.JLabel logOut;
     private com.k33ptoo.components.KGradientPanel setting;
     private javax.swing.JLabel settingbt;
+    private javax.swing.JTextField typetxt;
+    private javax.swing.JLabel updatelb;
     // End of variables declaration//GEN-END:variables
-int width = 180;
+int width = 240;
     int height = 60;
 
     void openSettingBar() {
@@ -678,7 +678,7 @@ int width = 180;
     }
 
     void closeSettingBar() {
-        final int initialX = 810;
+        int initialX = 750;
 
         new Thread(new Runnable() {
             @Override
@@ -697,3 +697,4 @@ int width = 180;
     }
 
 }
+

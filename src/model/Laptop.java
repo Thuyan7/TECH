@@ -9,18 +9,41 @@ package model;
  * @author AN
  */
 public class Laptop {
+    private int id;
     private String name;
     private String price;
     private String image;
     private String description;
    
-
-    public Laptop(String name, String price, String image, String description) {
+    public Laptop(){
+        this.id = 0;
+        this.name="";
+        this.image="";
+        this.price="";
+        this.description="";
+             
+                
+    }
+    public Laptop(int id,String name, String price, String image, String description) {
+        this.id=id;
         this.name = name;
         this.price = price;
         this.image = image;
         this.description = description;
     }
+    
+    public Laptop(int id){
+        this.id = id;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+    
     
 
     public String getName() {

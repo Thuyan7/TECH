@@ -5,11 +5,14 @@
 package view;
 
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
+import com.sun.jdi.connect.spi.Connection;
+import database.DatabaseConnection;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
+import java.sql.SQLException;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.Transformer;
@@ -24,7 +27,9 @@ import org.w3c.dom.Element;
  * @author AN
  */
 public class Buy1 extends javax.swing.JFrame {
+
     private Document document;
+
     /**
      * Creates new form Buy1
      */
@@ -33,10 +38,6 @@ public class Buy1 extends javax.swing.JFrame {
         nameProduct.setText(productName);
         priceProduct.setText(price);
     }
-    
-    
-    
-   
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -53,12 +54,13 @@ public class Buy1 extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         phonetxt = new javax.swing.JTextField();
         nametxt = new javax.swing.JTextField();
-        idtxt = new javax.swing.JTextField();
+        cccdtxt = new javax.swing.JTextField();
         priceProduct = new javax.swing.JLabel();
         nameProduct = new javax.swing.JLabel();
         kButton1 = new com.k33ptoo.components.KButton();
         kButton2 = new com.k33ptoo.components.KButton();
-        quantity = new javax.swing.JSpinner();
+        SpinnerNumberModel model = new SpinnerNumberModel(0, 0, Integer.MAX_VALUE, 1);
+        quantityTxt = new javax.swing.JSpinner(model);
         jLabel4 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -86,7 +88,7 @@ public class Buy1 extends javax.swing.JFrame {
             }
         });
         jPanel1.add(nametxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 150, 300, 30));
-        jPanel1.add(idtxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 200, 300, 30));
+        jPanel1.add(cccdtxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 200, 300, 30));
 
         priceProduct.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         priceProduct.setForeground(new java.awt.Color(255, 0, 51));
@@ -121,7 +123,7 @@ public class Buy1 extends javax.swing.JFrame {
             }
         });
         jPanel1.add(kButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 310, 160, -1));
-        jPanel1.add(quantity, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 102, 90, 30));
+        jPanel1.add(quantityTxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 102, 90, 30));
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel4.setText("Name:");
@@ -135,99 +137,77 @@ public class Buy1 extends javax.swing.JFrame {
     private void nametxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nametxtActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_nametxtActionPerformed
+    
+  
 
     private void kButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_kButton2ActionPerformed
-        // TODO add your handling code here:\
         String name = nametxt.getText();
-        String id = idtxt.getText();
+        String cccd = cccdtxt.getText();
         String phone = phonetxt.getText();
         String productName = nameProduct.getText();
         String price = priceProduct.getText();
+        String quantity = quantityTxt.getValue().toString();
 
-        try {
-            File xmlFile = new File("C:\\Users\\AN\\Downloads\\XML\\purchase.xml");
-            Document document;
-
-            if (xmlFile.exists()) {
-                // Nếu tệp đã tồn tại, load tài liệu XML từ tệp đó
-                DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
-                DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
-                document = docBuilder.parse(xmlFile);
-
-                // Tìm phần tử gốc <buy>
-                Element buyElement = (Element) document.getElementsByTagName("buy").item(0);
-
-                // Tạo các phần tử con và gắn chúng vào phần tử gốc
-                Element personElement = document.createElement("Order");
-                buyElement.appendChild(personElement);
-
-                Element nameElement = document.createElement("name");
-                nameElement.appendChild(document.createTextNode(name));
-                personElement.appendChild(nameElement);
-
-                Element cccdElement = document.createElement("cccd");
-                cccdElement.appendChild(document.createTextNode(id));
-                personElement.appendChild(cccdElement);
-
-                Element phoneElement = document.createElement("phone");
-                phoneElement.appendChild(document.createTextNode(phone));
-                personElement.appendChild(phoneElement);
-
-                Element productNameElement = document.createElement("productName");
-                productNameElement.appendChild(document.createTextNode(productName));
-                personElement.appendChild(productNameElement);
-
-                Element priceElement = document.createElement("price");
-                priceElement.appendChild(document.createTextNode(price));
-                personElement.appendChild(priceElement);
-            } else {
-                // Nếu tệp chưa tồn tại, tạo một tài liệu XML mới và thêm dữ liệu vào đó
-                DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
-                DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
-                document = docBuilder.newDocument();
-
-                // Tạo phần tử gốc <buy>
-                Element buyElement = document.createElement("buy");
-                document.appendChild(buyElement);
-
-                // Tạo các phần tử con và gắn chúng vào phần tử gốc
-                Element personElement = document.createElement("Order");
-                buyElement.appendChild(personElement);
-
-                Element nameElement = document.createElement("name");
-                nameElement.appendChild(document.createTextNode(name));
-                personElement.appendChild(nameElement);
-
-                Element cccdElement = document.createElement("cccd");
-                cccdElement.appendChild(document.createTextNode(id));
-                personElement.appendChild(cccdElement);
-
-                Element phoneElement = document.createElement("phone");
-                phoneElement.appendChild(document.createTextNode(phone));
-                personElement.appendChild(phoneElement);
-
-                Element productNameElement = document.createElement("productName");
-                productNameElement.appendChild(document.createTextNode(productName));
-                personElement.appendChild(productNameElement);
-
-                Element priceElement = document.createElement("price");
-                priceElement.appendChild(document.createTextNode(price));
-                personElement.appendChild(priceElement);
-            }
-
-            // Tạo một đối tượng Transformer để ghi tài liệu XML đã cập nhật hoặc mới vào tệp
-            TransformerFactory transformerFactory = TransformerFactory.newInstance();
-            Transformer transformer = transformerFactory.newTransformer();
-
-            // Ghi tài liệu XML vào tệp
-            DOMSource source = new DOMSource(document);
-            StreamResult result = new StreamResult(xmlFile);
-            transformer.transform(source, result);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
+       try {
+            java.sql.Connection conn = DatabaseConnection.getConnection();
+            String sql =  "INSERT INTO user (name, cccd, phone) VALUES (?, ?, ?)";
+            java.sql.PreparedStatement statement = conn.prepareStatement(sql);
+            statement.setString(1, name);
+            statement.setString(2, cccd);
+            statement.setString(3, phone);
+          
+            statement.executeUpdate();
+            statement.close();
+    } catch (Exception e) {
+        e.printStackTrace();
+        // Xử lý ngoại lệ nếu có
     }//GEN-LAST:event_kButton2ActionPerformed
+    try {
+        File xmlFile = new File("C:\\SQL2022/puschase.xml");
+        DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
+        Document document;
 
+        if (xmlFile.exists()) {
+            // Nếu tệp đã tồn tại, load tài liệu XML từ tệp đó
+            document = docBuilder.parse(xmlFile);
+        } else {
+            // Nếu tệp chưa tồn tại, tạo một tài liệu XML mới
+            document = docBuilder.newDocument();
+            // Tạo phần tử gốc <Products>
+            Element productsElement = document.createElement("Products");
+            document.appendChild(productsElement);
+        }
+
+        // Tạo phần tử con <Product> và các phần tử con của nó
+        Element orderElement = document.createElement("Product");
+
+        Element productNameElement = document.createElement("name");
+        productNameElement.appendChild(document.createTextNode(productName));
+        orderElement.appendChild(productNameElement);
+
+        Element priceElement = document.createElement("price");
+        priceElement.appendChild(document.createTextNode(price));
+        orderElement.appendChild(priceElement);
+
+        Element quantityElement = document.createElement("quantity");
+        quantityElement.appendChild(document.createTextNode(quantity));
+        orderElement.appendChild(quantityElement);
+
+        // Gắn phần tử <Product> vào phần tử gốc <Products>
+        document.getDocumentElement().appendChild(orderElement);
+        TransformerFactory transformerFactory = TransformerFactory.newInstance();
+        Transformer transformer = transformerFactory.newTransformer();
+
+        // Ghi tài liệu XML vào tệp
+        DOMSource source = new DOMSource(document);
+        StreamResult result = new StreamResult(xmlFile);
+        transformer.transform(source, result);
+    } catch (Exception ex) {
+        ex.printStackTrace();
+        // Xử lý ngoại lệ nếu có
+    }
+    }
     /**
      * @param args the command line arguments
      */
@@ -265,7 +245,7 @@ public class Buy1 extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTextField idtxt;
+    private javax.swing.JTextField cccdtxt;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -277,6 +257,6 @@ public class Buy1 extends javax.swing.JFrame {
     private javax.swing.JTextField nametxt;
     private javax.swing.JTextField phonetxt;
     private javax.swing.JLabel priceProduct;
-    private javax.swing.JSpinner quantity;
+    private javax.swing.JSpinner quantityTxt;
     // End of variables declaration//GEN-END:variables
 }
