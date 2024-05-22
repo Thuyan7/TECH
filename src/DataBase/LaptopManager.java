@@ -88,4 +88,32 @@ public static void updateLaptop(Laptop l) {
         e.printStackTrace(); // Handle exception
     }
 }
+
+public static Laptop getLaptopById(int id) {
+    Laptop laptop = null;
+    String sql = "SELECT * FROM laptop WHERE id = ?";
+    
+    try {
+        Connection con = DatabaseConnection.getConnection();
+        PreparedStatement pstmt = con.prepareStatement(sql);
+        pstmt.setInt(1, id);
+        ResultSet rs = pstmt.executeQuery();
+        
+        if (rs.next()) {
+            String name = rs.getString("name");
+            String price = rs.getString("price");
+            String image = rs.getString("image");
+            String description = rs.getString("description");
+
+            laptop = new Laptop(id, name, price, image, description);
+        }
+
+        DatabaseConnection.closeConnection(con);
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+    return laptop;
+}
+
+
 }

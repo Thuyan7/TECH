@@ -156,6 +156,7 @@ public class AddProduct extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void destxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_destxtActionPerformed
@@ -192,9 +193,10 @@ public class AddProduct extends javax.swing.JFrame {
         // Thêm dữ liệu vào bảng tương ứng
         if (type.equals("Laptop")) {
             addLaptop(name, price, des, img);
-        } else if (type.equals("Phone")) {
+        } else if (type.equals("Smartphone")) {
             addPhone(name, price, des, img);
         }
+        
         
     }//GEN-LAST:event_savebtActionPerformed
 

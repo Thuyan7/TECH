@@ -2,6 +2,12 @@ package view;
 
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
 import javax.swing.JOptionPane;
+import database.DatabaseConnection;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
@@ -19,6 +25,42 @@ public class Login extends javax.swing.JFrame {
      */
     public Login() {
         initComponents();
+    }
+    
+      private String md5Hash(String password) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            byte[] messageDigest = md.digest(password.getBytes());
+            StringBuilder sb = new StringBuilder();
+            for (byte b : messageDigest) {
+                sb.append(String.format("%02x", b));
+            }
+            return sb.toString();
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    // Method to validate login
+    private boolean validateLogin(String username, String password) {
+        String hashedPassword = md5Hash(password);
+        Connection conn = null;
+        try {
+            conn = DatabaseConnection.getConnection();
+            String sql = "SELECT * FROM accoutuser WHERE username = ? AND password = ?";
+            try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+                pstmt.setString(1, username);
+                pstmt.setString(2, hashedPassword);
+                try (ResultSet rs = pstmt.executeQuery()) {
+                    return rs.next();
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            DatabaseConnection.closeConnection(conn);
+        }
     }
 
     /**
@@ -38,7 +80,8 @@ public class Login extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         jTextField2 = new javax.swing.JTextField();
         jPasswordField1 = new javax.swing.JPasswordField();
-        kButton1 = new com.k33ptoo.components.KButton();
+        Login = new com.k33ptoo.components.KButton();
+        jLabel4 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -91,23 +134,27 @@ public class Login extends javax.swing.JFrame {
         jPasswordField1.setEchoChar('.');
         jPanel4.add(jPasswordField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 280, 310, 35));
 
-        kButton1.setForeground(new java.awt.Color(0, 0, 0));
-        kButton1.setText("LOGIN");
-        kButton1.setkBackGroundColor(new java.awt.Color(51, 153, 255));
-        kButton1.setkBorderRadius(20);
-        kButton1.setkEndColor(new java.awt.Color(255, 255, 255));
-        kButton1.setkHoverEndColor(new java.awt.Color(51, 153, 255));
-        kButton1.setkHoverForeGround(new java.awt.Color(51, 153, 255));
-        kButton1.setkHoverStartColor(new java.awt.Color(255, 255, 255));
-        kButton1.setkPressedColor(new java.awt.Color(255, 255, 255));
-        kButton1.setkSelectedColor(new java.awt.Color(255, 255, 255));
-        kButton1.setkStartColor(new java.awt.Color(51, 153, 255));
-        kButton1.addActionListener(new java.awt.event.ActionListener() {
+        Login.setForeground(new java.awt.Color(0, 0, 0));
+        Login.setText("LOGIN");
+        Login.setkBackGroundColor(new java.awt.Color(51, 153, 255));
+        Login.setkBorderRadius(20);
+        Login.setkEndColor(new java.awt.Color(255, 255, 255));
+        Login.setkHoverEndColor(new java.awt.Color(51, 153, 255));
+        Login.setkHoverForeGround(new java.awt.Color(51, 153, 255));
+        Login.setkHoverStartColor(new java.awt.Color(255, 255, 255));
+        Login.setkPressedColor(new java.awt.Color(255, 255, 255));
+        Login.setkSelectedColor(new java.awt.Color(255, 255, 255));
+        Login.setkStartColor(new java.awt.Color(51, 153, 255));
+        Login.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                kButton1ActionPerformed(evt);
+                LoginActionPerformed(evt);
             }
         });
-        jPanel4.add(kButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 350, 300, 40));
+        jPanel4.add(Login, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 350, 300, 40));
+
+        jLabel4.setForeground(new java.awt.Color(51, 102, 255));
+        jLabel4.setText("Create a new account!");
+        jPanel4.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 400, -1, -1));
 
         getContentPane().add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 0, 460, 530));
 
@@ -115,30 +162,24 @@ public class Login extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void kButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_kButton1ActionPerformed
-        String admin = "admin"; 
-        String password = "thuyan76"; 
+    private void LoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LoginActionPerformed
+        String enteredAdmin = jTextField2.getText();
+        String enteredPassword = new String(jPasswordField1.getPassword());
 
-        String enteredAdmin = jTextField2.getText(); 
-        String enteredPassword = new String(jPasswordField1.getPassword()); 
-
-        if (enteredAdmin.equals(admin)
-                && enteredPassword.equals(password)) {
-            
+        if (validateLogin(enteredAdmin, enteredPassword)) {
             JOptionPane.showMessageDialog(null, "Login Successful!");
             new Home().setVisible(true);
             dispose();
         } else {
-            attempts++; 
+            attempts++;
             if (attempts >= 3) {
                 JOptionPane.showMessageDialog(null, "Too many failed attempts. Exiting...");
-                System.exit(0); 
+                System.exit(0);
             } else {
-               
-                JOptionPane.showMessageDialog(null, "Incorrect admin or password. Please try again.");
+                JOptionPane.showMessageDialog(null, "Incorrect username or password. Please try again.");
             }
         }
-    }//GEN-LAST:event_kButton1ActionPerformed
+    }//GEN-LAST:event_LoginActionPerformed
 
     /**
      * @param args the command line arguments
@@ -177,14 +218,15 @@ public class Login extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private com.k33ptoo.components.KButton Login;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPasswordField jPasswordField1;
     private javax.swing.JTextField jTextField2;
-    private com.k33ptoo.components.KButton kButton1;
     // End of variables declaration//GEN-END:variables
 }

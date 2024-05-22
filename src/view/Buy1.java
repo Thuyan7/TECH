@@ -132,6 +132,7 @@ public class Buy1 extends javax.swing.JFrame {
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 660, 380));
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void nametxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nametxtActionPerformed
@@ -150,7 +151,7 @@ public class Buy1 extends javax.swing.JFrame {
 
        try {
             java.sql.Connection conn = DatabaseConnection.getConnection();
-            String sql =  "INSERT INTO user (name, cccd, phone) VALUES (?, ?, ?)";
+            String sql =  "INSERT INTO user (name, id, phone) VALUES (?, ?, ?)";
             java.sql.PreparedStatement statement = conn.prepareStatement(sql);
             statement.setString(1, name);
             statement.setString(2, cccd);
@@ -163,7 +164,7 @@ public class Buy1 extends javax.swing.JFrame {
         // Xử lý ngoại lệ nếu có
     }//GEN-LAST:event_kButton2ActionPerformed
     try {
-        File xmlFile = new File("C:\\SQL2022/puschase.xml");
+        File xmlFile = new File("C:\\HP\\purchase.xml");
         DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
         Document document;

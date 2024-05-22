@@ -14,9 +14,11 @@ import com.mysql.cj.xdevapi.Statement;
 import com.sun.jdi.connect.spi.Connection;
 import controller.PurchaseController;
 import database.DatabaseConnection;
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.dnd.DragSourceListener;
@@ -37,6 +39,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
@@ -58,6 +62,50 @@ public class Home extends javax.swing.JFrame {
     public Home() {
         initComponents();
         displayLaptop();
+    }
+    
+
+
+    
+    int width =180 ;
+    int height = 60;
+
+    private void openSettingBar() {
+        int initialX = 970;
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                for (int i = width; i >= 0; i--) {
+                    int newX = initialX - (width - i);
+                    setting.setBounds(newX, setting.getY(), width - i, height);
+                    try {
+                        Thread.sleep(2);
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(Home.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }
+        }).start();
+    }
+
+    private void closeSettingBar() {
+        int initialX =810;
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                for (int i = 0; i < width; i++) {
+                    int newX = initialX + i;
+                    setting.setBounds(newX, setting.getY(), width - i, height);
+                    try {
+                        Thread.sleep(2);
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(Home.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }
+        }).start();
     }
 
     private void displayLaptop() {
@@ -223,13 +271,125 @@ public class Home extends javax.swing.JFrame {
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         jScrollPane1.setViewportView(scrollPane);
     }
-    private void displayUserTable(PurchaseController controller) {
-            PurchaseTableModel model = controller.getPurchaseTableModel();
+    private void displayDailyTable(PurchaseController controller) {         
+            DefaultTableModel model = controller.getPurchaseTableModel();
             JTable table = new JTable(model);
             JScrollPane scrollPane = new JScrollPane(table);
             scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
             jScrollPane1.setViewportView(scrollPane);
     }
+    private void displayUserTable() {
+        String sql = "SELECT * FROM user";
+        try {
+            java.sql.Connection con = DatabaseConnection.getConnection();
+            java.sql.Statement stmt = con.createStatement();
+            ResultSet resultSet = stmt.executeQuery(sql);
+
+            // Lấy số lượng hàng và số lượng cột của kết quả truy vấn
+            ResultSetMetaData metaData = resultSet.getMetaData();
+            int columnCount = metaData.getColumnCount();
+
+            // Tạo một DefaultTableModel để lưu trữ dữ liệu
+            DefaultTableModel tableModel = new DefaultTableModel();
+
+            // Thêm tên cột vào DefaultTableModel
+            for (int columnIndex = 1; columnIndex <= columnCount; columnIndex++) {
+                tableModel.addColumn(metaData.getColumnLabel(columnIndex));
+            }
+
+            // Thêm dữ liệu từ kết quả truy vấn vào DefaultTableModel
+            while (resultSet.next()) {
+                Object[] rowData = new Object[columnCount];
+                for (int i = 0; i < columnCount; i++) {
+                    rowData[i] = resultSet.getObject(i + 1);
+                }
+                tableModel.addRow(rowData);
+            }
+
+            // Tạo một JTable với DefaultTableModel
+            JTable table = new JTable(tableModel);
+
+            // Đặt JTable vào JScrollPane
+            JScrollPane scrollPane = new JScrollPane(table);
+
+            // Đặt thuộc tính cho JScrollPane
+            scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+
+            jScrollPane1.setViewportView(scrollPane);
+     
+            stmt.close();
+            con.close();
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+    
+private void addChatPanel() {
+    // Panel chứa tất cả các tin nhắn
+    JPanel messagesPanel = new JPanel();
+    messagesPanel.setLayout(new BoxLayout(messagesPanel, BoxLayout.Y_AXIS));
+    
+    
+    JScrollPane messagesScrollPane = new JScrollPane(messagesPanel);
+    messagesScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+    
+    // Panel chứa ô nhập tin nhắn
+    JPanel inputPanel = new JPanel(new BorderLayout());
+    JTextField messageField = new JTextField();
+    messageField.setPreferredSize(new Dimension(400, 30));  
+    messageField.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            String message = messageField.getText().trim();
+            if (!message.isEmpty()) {
+                //Panel chứa tin nhắn
+                JPanel singleMessageContainer = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+                singleMessageContainer.setMaximumSize(new Dimension(messagesPanel.getWidth(), 50));
+                
+                KGradientPanel singleMessagePanel = new KGradientPanel();
+                singleMessagePanel.setLayout(new BorderLayout());
+                singleMessagePanel.setPreferredSize(new Dimension(200, 50)); 
+                singleMessagePanel.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
+                singleMessagePanel.setkStartColor(new Color(51, 153, 255));
+                singleMessagePanel.setkEndColor(Color.white);
+                singleMessagePanel.setkBorderRadius(15);
+
+                JLabel messageLabel = new JLabel("<html><body>" + message + "</body></html>"); 
+                singleMessagePanel.add(messageLabel, BorderLayout.CENTER);
+
+                
+                singleMessageContainer.add(singleMessagePanel);
+                messagesPanel.add(Box.createVerticalStrut(10));
+                messagesPanel.add(singleMessageContainer);
+                messagesPanel.revalidate();
+                messagesPanel.repaint();
+
+                
+                messagesScrollPane.getVerticalScrollBar().setValue(messagesScrollPane.getVerticalScrollBar().getMaximum());
+
+                
+                messageField.setText("");
+            }
+        }
+    });
+    inputPanel.add(messageField, BorderLayout.CENTER);
+
+    // Thêm panel chứa tin nhắn vào panel chính
+    JPanel chatPanel = new JPanel(new BorderLayout());
+    chatPanel.add(messagesScrollPane, BorderLayout.CENTER);
+    chatPanel.add(inputPanel, BorderLayout.SOUTH);
+
+    
+    JScrollPane scrollPane = new JScrollPane(chatPanel);
+    scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+    jScrollPane1.setViewportView(scrollPane);
+}
+
+
+
+
+
 
     
 
@@ -259,9 +419,9 @@ public class Home extends javax.swing.JFrame {
         closelb = new javax.swing.JLabel();
         deletelb = new javax.swing.JLabel();
         updatelb = new javax.swing.JLabel();
-        chatlb = new javax.swing.JLabel();
         id = new javax.swing.JTextField();
         typetxt = new javax.swing.JTextField();
+        jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jPanel2 = new javax.swing.JPanel();
 
@@ -432,22 +592,14 @@ public class Home extends javax.swing.JFrame {
             }
         });
 
-        chatlb.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/comment.png"))); // NOI18N
-        chatlb.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                chatlbMouseClicked(evt);
-            }
-        });
-
         javax.swing.GroupLayout settingLayout = new javax.swing.GroupLayout(setting);
         setting.setLayout(settingLayout);
         settingLayout.setHorizontalGroup(
             settingLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, settingLayout.createSequentialGroup()
+                .addContainerGap()
                 .addComponent(closelb)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(chatlb, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
                 .addComponent(updatelb, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(deletelb, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -462,14 +614,12 @@ public class Home extends javax.swing.JFrame {
                 .addGroup(settingLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(add, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(deletelb, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(updatelb, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, settingLayout.createSequentialGroup()
                         .addGap(0, 7, Short.MAX_VALUE)
                         .addGroup(settingLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, settingLayout.createSequentialGroup()
-                                .addComponent(closelb, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(9, 9, 9))
-                            .addComponent(chatlb, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(updatelb)
+                            .addComponent(closelb, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(9, 9, 9)))
                 .addContainerGap())
         );
 
@@ -482,7 +632,17 @@ public class Home extends javax.swing.JFrame {
             }
         });
         kGradientPanel1.add(id, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, -1, -1));
+
+        typetxt.setVisible(false);
         kGradientPanel1.add(typetxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 20, -1, -1));
+
+        jLabel1.setText("jLabel1");
+        jLabel1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel1MouseClicked(evt);
+            }
+        });
+        kGradientPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 20, -1, -1));
 
         jPanel1.add(kGradientPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 0, 1060, 60));
 
@@ -517,7 +677,7 @@ public class Home extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btCustomerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btCustomerActionPerformed
-        
+        displayUserTable();
     }//GEN-LAST:event_btCustomerActionPerformed
 
     private void btLaptopActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btLaptopActionPerformed
@@ -537,7 +697,7 @@ public class Home extends javax.swing.JFrame {
 
     private void btDailyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btDailyActionPerformed
         PurchaseController controller = new PurchaseController();
-        displayUserTable(controller);
+        displayDailyTable(controller);
     }//GEN-LAST:event_btDailyActionPerformed
 
     private void btDailyMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btDailyMouseClicked
@@ -586,20 +746,16 @@ public class Home extends javax.swing.JFrame {
     }//GEN-LAST:event_deletelbMouseClicked
 
     private void updatelbMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_updatelbMouseClicked
-        UpdateProduct update = new UpdateProduct(id.getText());
+        UpdateProduct update = new UpdateProduct(id.getText(),typetxt.getText());
+        String types = typetxt.getText();
         update.setVisible(true);
-        
     }//GEN-LAST:event_updatelbMouseClicked
 
-    private void chatlbMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_chatlbMouseClicked
-        // TODO add your handling code here:
-        String serverAddress = "192.168.1.7";
-        String clientName = JOptionPane.showInputDialog("Nhập tên của bạn:");
-        ChatClient chats = new ChatClient(serverAddress, clientName);
-        chats.setVisible(true);
-    }//GEN-LAST:event_chatlbMouseClicked
+    private void jLabel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel1MouseClicked
+        addChatPanel();
+    }//GEN-LAST:event_jLabel1MouseClicked
 
-    public static void main(String args[]) {
+    public static void main(String args[]) { 
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -640,11 +796,11 @@ public class Home extends javax.swing.JFrame {
     private com.k33ptoo.components.KButton btDaily;
     private com.k33ptoo.components.KButton btLaptop;
     private com.k33ptoo.components.KButton btPhone;
-    private javax.swing.JLabel chatlb;
     private javax.swing.JLabel closelb;
     private javax.swing.JLabel deletelb;
     private com.formdev.flatlaf.ui.FlatMenuUI flatMenuUI1;
     private javax.swing.JTextField id;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
@@ -655,46 +811,7 @@ public class Home extends javax.swing.JFrame {
     private javax.swing.JTextField typetxt;
     private javax.swing.JLabel updatelb;
     // End of variables declaration//GEN-END:variables
-int width = 240;
-    int height = 60;
 
-    void openSettingBar() {
-        final int initialX = 970;
-
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                for (int i = width; i >= 0; i--) {
-                    int newX = initialX - (width - i);
-                    setting.setBounds(newX, setting.getY(), width - i, height);
-                    try {
-                        Thread.sleep(2);
-                    } catch (InterruptedException ex) {
-                        Logger.getLogger(Home.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
-            }
-        }).start();
-    }
-
-    void closeSettingBar() {
-        int initialX = 750;
-
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                for (int i = 0; i < width; i++) {
-                    int newX = initialX + i;
-                    setting.setBounds(newX, setting.getY(), width - i, height);
-                    try {
-                        Thread.sleep(2);
-                    } catch (InterruptedException ex) {
-                        Logger.getLogger(Home.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
-            }
-        }).start();
-    }
 
 }
 

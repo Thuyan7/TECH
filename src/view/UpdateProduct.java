@@ -28,11 +28,42 @@ public class UpdateProduct extends javax.swing.JFrame {
     /**
      * Creates new form AddProduct
      */
-    public UpdateProduct(String ids) {
+    public UpdateProduct(String ids, String type) {
         initComponents();
-        id.setText(ids);
-        
+        idtxt.setText(ids);
+        typetxt.setText(type);
+        if(type.equals("LAPTOP")){
+            getLaptop(Integer.parseInt(ids));
+        }else if(type.equals("SMARTPHONE")){
+            getPhone(Integer.parseInt(ids));
+        }
     }
+    private void getLaptop(int id) {
+    Laptop laptop = LaptopManager.getLaptopById(id);
+    if (laptop != null) {
+        nametxt.setText(laptop.getName());
+        pricetxt.setText(laptop.getPrice());
+        imgtxt.setText(laptop.getImage());
+        destxt.setText(laptop.getDescription());
+        typecb.setSelectedItem("Laptop");
+    } else {
+        JOptionPane.showMessageDialog(this, "No laptop found with the given ID.");
+    }
+}
+    
+    private void getPhone(int id) {
+    Phone phone = PhoneManager.getPhoneById(id);
+    if (phone != null) {
+        nametxt.setText(phone.getName());
+        pricetxt.setText(phone.getPrice());
+        imgtxt.setText(phone.getImage());
+        destxt.setText(phone.getDescription());
+        typecb.setSelectedItem("Smartphone"); 
+    } else {
+        JOptionPane.showMessageDialog(this, "No phone found with the given ID.");
+    }
+}
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -54,10 +85,11 @@ public class UpdateProduct extends javax.swing.JFrame {
         kButton1 = new com.k33ptoo.components.KButton();
         updatebt = new com.k33ptoo.components.KButton();
         typelb = new javax.swing.JLabel();
-        id = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         destxt = new javax.swing.JTextField();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        typecb = new javax.swing.JComboBox<>();
+        idtxt = new javax.swing.JTextField();
+        typetxt = new javax.swing.JTextField();
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -132,7 +164,6 @@ public class UpdateProduct extends javax.swing.JFrame {
         typelb.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         typelb.setText("Type:");
         jPanel1.add(typelb, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 280, 60, -1));
-        jPanel1.add(id, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 10, 50, 20));
 
         jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel6.setText("Image:");
@@ -146,13 +177,19 @@ public class UpdateProduct extends javax.swing.JFrame {
         });
         jPanel1.add(destxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 170, 300, 30));
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Laptop", "Smartphone" }));
-        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+        typecb.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Laptop", "Smartphone" }));
+        typecb.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox1ActionPerformed(evt);
+                typecbActionPerformed(evt);
             }
         });
-        jPanel1.add(jComboBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 280, -1, 30));
+        jPanel1.add(typecb, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 280, -1, 30));
+
+        idtxt.setVisible(false);
+        jPanel1.add(idtxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 10, -1, -1));
+
+        typetxt.setVisible(false);
+        jPanel1.add(typetxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 10, -1, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -166,6 +203,7 @@ public class UpdateProduct extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void destxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_destxtActionPerformed
@@ -173,24 +211,21 @@ public class UpdateProduct extends javax.swing.JFrame {
     }//GEN-LAST:event_destxtActionPerformed
 
     private void updatebtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updatebtActionPerformed
- try {
-        
-        final int ids = Integer.valueOf(id.getText());
+     try {
+        int idd = Integer.parseInt(idtxt.getText());
         String name = nametxt.getText();
         String price = pricetxt.getText();
         String des = destxt.getText();
         String img = imgtxt.getText();
-        String type = jComboBox1.getSelectedItem().toString();
+        String type = typetxt.getText();
         
-        if (type.equals("Laptop")) {
-            Laptop laptop = new Laptop(ids, name, price, img, des);
+        if (type.equals("LAPTOP")) {
+            Laptop laptop = new Laptop(idd, name, price, img, des);
             LaptopManager.updateLaptop(laptop);
-        } else if (type.equals("Phone")) {
-            Phone phone = new Phone(ids, name, price, img, des);
+        } else if (type.equals("SMARTPHONE")) {
+            Phone phone = new Phone(idd, name, price, img, des);
             PhoneManager.updatePhone(phone);
         }
-        
-        // Optionally, display a success message
         JOptionPane.showMessageDialog(this, "Product updated successfully!");
         
     } catch (NumberFormatException e) {
@@ -221,9 +256,9 @@ public class UpdateProduct extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_nametxtActionPerformed
 
-    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+    private void typecbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_typecbActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jComboBox1ActionPerformed
+    }//GEN-LAST:event_typecbActionPerformed
                                                                                                                                                                                      
 
 
@@ -254,17 +289,16 @@ public class UpdateProduct extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new UpdateProduct("id").setVisible(true);
+                new UpdateProduct("id","type").setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField destxt;
-    private javax.swing.JLabel id;
+    private javax.swing.JTextField idtxt;
     private javax.swing.JButton img;
     private javax.swing.JTextField imgtxt;
-    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -273,7 +307,9 @@ public class UpdateProduct extends javax.swing.JFrame {
     private com.k33ptoo.components.KButton kButton1;
     private javax.swing.JTextField nametxt;
     private javax.swing.JTextField pricetxt;
+    private javax.swing.JComboBox<String> typecb;
     private javax.swing.JLabel typelb;
+    private javax.swing.JTextField typetxt;
     private com.k33ptoo.components.KButton updatebt;
     // End of variables declaration//GEN-END:variables
 }

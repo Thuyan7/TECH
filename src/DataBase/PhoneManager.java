@@ -8,6 +8,7 @@ import database.DatabaseConnection;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import model.Laptop;
 import model.Phone;
 
 
@@ -90,6 +91,32 @@ public class PhoneManager {
     } catch (Exception e) {
         e.printStackTrace(); // Handle exception
     }
+}
+  
+  public static Phone getPhoneById(int id) {
+    Phone phone= null;
+    String sql = "SELECT * FROM phone WHERE id = ?";
+    
+    try {
+        Connection con = DatabaseConnection.getConnection();
+        PreparedStatement pstmt = con.prepareStatement(sql);
+        pstmt.setInt(1, id);
+        ResultSet rs = pstmt.executeQuery();
+        
+        if (rs.next()) {
+            String name = rs.getString("name");
+            String price = rs.getString("price");
+            String image = rs.getString("image");
+            String description = rs.getString("description");
+
+            phone = new Phone(id, name, price, image, description);
+        }
+
+        DatabaseConnection.closeConnection(con);
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+    return phone;
 }
     
 }
