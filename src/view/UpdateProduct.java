@@ -16,6 +16,7 @@ import com.sun.jdi.connect.spi.Connection;
 import database.DatabaseConnection;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.SpinnerNumberModel;
 import model.Laptop;
 import model.Phone;
 
@@ -96,15 +97,15 @@ public class UpdateProduct extends javax.swing.JFrame {
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel2.setText("Name:");
-        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 70, 60, -1));
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 50, 60, -1));
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel3.setText("Price:");
-        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 120, 60, -1));
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 90, 60, -1));
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel4.setText("Description:");
-        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 170, 110, -1));
+        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 140, 110, -1));
 
         nametxt.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         nametxt.addActionListener(new java.awt.event.ActionListener() {
@@ -112,7 +113,7 @@ public class UpdateProduct extends javax.swing.JFrame {
                 nametxtActionPerformed(evt);
             }
         });
-        jPanel1.add(nametxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 70, 300, 30));
+        jPanel1.add(nametxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 40, 300, 30));
 
         pricetxt.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         pricetxt.addActionListener(new java.awt.event.ActionListener() {
@@ -120,7 +121,7 @@ public class UpdateProduct extends javax.swing.JFrame {
                 pricetxtActionPerformed(evt);
             }
         });
-        jPanel1.add(pricetxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 120, 300, 30));
+        jPanel1.add(pricetxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 80, 300, 30));
 
         img.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/image.png"))); // NOI18N
         img.addActionListener(new java.awt.event.ActionListener() {
@@ -128,8 +129,8 @@ public class UpdateProduct extends javax.swing.JFrame {
                 imgActionPerformed(evt);
             }
         });
-        jPanel1.add(img, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 220, 50, 40));
-        jPanel1.add(imgtxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 220, 240, 40));
+        jPanel1.add(img, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 190, 50, 40));
+        jPanel1.add(imgtxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 190, 240, 40));
 
         kButton1.setText("CANCEL");
         kButton1.setkBorderRadius(20);
@@ -163,11 +164,11 @@ public class UpdateProduct extends javax.swing.JFrame {
 
         typelb.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         typelb.setText("Type:");
-        jPanel1.add(typelb, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 280, 60, -1));
+        jPanel1.add(typelb, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 260, 60, -1));
 
         jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel6.setText("Image:");
-        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 230, 60, -1));
+        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 200, 60, -1));
 
         destxt.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         destxt.addActionListener(new java.awt.event.ActionListener() {
@@ -175,7 +176,7 @@ public class UpdateProduct extends javax.swing.JFrame {
                 destxtActionPerformed(evt);
             }
         });
-        jPanel1.add(destxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 170, 300, 30));
+        jPanel1.add(destxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 140, 300, 30));
 
         typecb.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Laptop", "Smartphone" }));
         typecb.addActionListener(new java.awt.event.ActionListener() {
@@ -183,9 +184,14 @@ public class UpdateProduct extends javax.swing.JFrame {
                 typecbActionPerformed(evt);
             }
         });
-        jPanel1.add(typecb, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 280, -1, 30));
+        jPanel1.add(typecb, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 260, -1, 30));
 
         idtxt.setVisible(false);
+        idtxt.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                idtxtActionPerformed(evt);
+            }
+        });
         jPanel1.add(idtxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 10, -1, -1));
 
         typetxt.setVisible(false);
@@ -220,10 +226,10 @@ public class UpdateProduct extends javax.swing.JFrame {
         String type = typetxt.getText();
         
         if (type.equals("LAPTOP")) {
-            Laptop laptop = new Laptop(idd, name, price, img, des);
+            Laptop laptop = new Laptop(idd, name, price,img, des);
             LaptopManager.updateLaptop(laptop);
         } else if (type.equals("SMARTPHONE")) {
-            Phone phone = new Phone(idd, name, price, img, des);
+            Phone phone = new Phone(idd, name, price,img, des);
             PhoneManager.updatePhone(phone);
         }
         JOptionPane.showMessageDialog(this, "Product updated successfully!");
@@ -259,6 +265,10 @@ public class UpdateProduct extends javax.swing.JFrame {
     private void typecbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_typecbActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_typecbActionPerformed
+
+    private void idtxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_idtxtActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_idtxtActionPerformed
                                                                                                                                                                                      
 
 

@@ -27,7 +27,7 @@ public class Login extends javax.swing.JFrame {
         initComponents();
     }
     
-      private String md5Hash(String password) {
+     private String md5Hash(String password) {
         try {
             MessageDigest md = MessageDigest.getInstance("MD5");
             byte[] messageDigest = md.digest(password.getBytes());
@@ -62,6 +62,9 @@ public class Login extends javax.swing.JFrame {
             DatabaseConnection.closeConnection(conn);
         }
     }
+    
+      
+     
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -81,7 +84,7 @@ public class Login extends javax.swing.JFrame {
         jTextField2 = new javax.swing.JTextField();
         jPasswordField1 = new javax.swing.JPasswordField();
         Login = new com.k33ptoo.components.KButton();
-        jLabel4 = new javax.swing.JLabel();
+        register = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -152,9 +155,14 @@ public class Login extends javax.swing.JFrame {
         });
         jPanel4.add(Login, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 350, 300, 40));
 
-        jLabel4.setForeground(new java.awt.Color(51, 102, 255));
-        jLabel4.setText("Create a new account!");
-        jPanel4.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 400, -1, -1));
+        register.setForeground(new java.awt.Color(51, 102, 255));
+        register.setText("Create a new account!");
+        register.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                registerMouseClicked(evt);
+            }
+        });
+        jPanel4.add(register, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 400, -1, -1));
 
         getContentPane().add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 0, 460, 530));
 
@@ -163,8 +171,8 @@ public class Login extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void LoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LoginActionPerformed
-        String enteredAdmin = jTextField2.getText();
-        String enteredPassword = new String(jPasswordField1.getPassword());
+    String enteredAdmin = jTextField2.getText();
+    String enteredPassword = new String(jPasswordField1.getPassword());
 
         if (validateLogin(enteredAdmin, enteredPassword)) {
             JOptionPane.showMessageDialog(null, "Login Successful!");
@@ -180,6 +188,12 @@ public class Login extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_LoginActionPerformed
+
+    private void registerMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_registerMouseClicked
+        Register register = new Register();
+        register.setVisible(true);
+        dispose();
+    }//GEN-LAST:event_registerMouseClicked
 
     /**
      * @param args the command line arguments
@@ -222,11 +236,11 @@ public class Login extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPasswordField jPasswordField1;
     private javax.swing.JTextField jTextField2;
+    private javax.swing.JLabel register;
     // End of variables declaration//GEN-END:variables
 }

@@ -33,7 +33,7 @@ public class PhoneManager {
                 String image = rs.getString("image");
                 String description = rs.getString("description"); 
 
-                Phone phone = new Phone(id,name, price, image, description);
+                Phone phone = new Phone(id,name, price,image, description);
                 phoneList.add(phone);
             }
 
@@ -109,7 +109,7 @@ public class PhoneManager {
             String image = rs.getString("image");
             String description = rs.getString("description");
 
-            phone = new Phone(id, name, price, image, description);
+            phone = new Phone(id, name, price,image, description);
         }
 
         DatabaseConnection.closeConnection(con);
@@ -117,6 +117,20 @@ public class PhoneManager {
         e.printStackTrace();
     }
     return phone;
+}
+  
+ public static void updatePhoneQuantity(int id, int newQuantity) {
+    String sql = "UPDATE phone SET quantity=? WHERE id=?";
+    try {
+        Connection con = DatabaseConnection.getConnection();
+        PreparedStatement ps = con.prepareStatement(sql);
+        ps.setInt(1, newQuantity);
+        ps.setInt(2, id);
+        ps.executeUpdate();
+        DatabaseConnection.closeConnection(con);
+    } catch (Exception e) {
+        e.printStackTrace(); // Handle exception
+    }
 }
     
 }

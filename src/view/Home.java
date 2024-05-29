@@ -325,75 +325,6 @@ public class Home extends javax.swing.JFrame {
         }
     }
     
-private void addChatPanel() {
-    // Panel chứa tất cả các tin nhắn
-    JPanel messagesPanel = new JPanel();
-    messagesPanel.setLayout(new BoxLayout(messagesPanel, BoxLayout.Y_AXIS));
-    
-    
-    JScrollPane messagesScrollPane = new JScrollPane(messagesPanel);
-    messagesScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-    
-    // Panel chứa ô nhập tin nhắn
-    JPanel inputPanel = new JPanel(new BorderLayout());
-    JTextField messageField = new JTextField();
-    messageField.setPreferredSize(new Dimension(400, 30));  
-    messageField.addActionListener(new ActionListener() {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            String message = messageField.getText().trim();
-            if (!message.isEmpty()) {
-                //Panel chứa tin nhắn
-                JPanel singleMessageContainer = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-                singleMessageContainer.setMaximumSize(new Dimension(messagesPanel.getWidth(), 50));
-                
-                KGradientPanel singleMessagePanel = new KGradientPanel();
-                singleMessagePanel.setLayout(new BorderLayout());
-                singleMessagePanel.setPreferredSize(new Dimension(200, 50)); 
-                singleMessagePanel.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
-                singleMessagePanel.setkStartColor(new Color(51, 153, 255));
-                singleMessagePanel.setkEndColor(Color.white);
-                singleMessagePanel.setkBorderRadius(15);
-
-                JLabel messageLabel = new JLabel("<html><body>" + message + "</body></html>"); 
-                singleMessagePanel.add(messageLabel, BorderLayout.CENTER);
-
-                
-                singleMessageContainer.add(singleMessagePanel);
-                messagesPanel.add(Box.createVerticalStrut(10));
-                messagesPanel.add(singleMessageContainer);
-                messagesPanel.revalidate();
-                messagesPanel.repaint();
-
-                
-                messagesScrollPane.getVerticalScrollBar().setValue(messagesScrollPane.getVerticalScrollBar().getMaximum());
-
-                
-                messageField.setText("");
-            }
-        }
-    });
-    inputPanel.add(messageField, BorderLayout.CENTER);
-
-    // Thêm panel chứa tin nhắn vào panel chính
-    JPanel chatPanel = new JPanel(new BorderLayout());
-    chatPanel.add(messagesScrollPane, BorderLayout.CENTER);
-    chatPanel.add(inputPanel, BorderLayout.SOUTH);
-
-    
-    JScrollPane scrollPane = new JScrollPane(chatPanel);
-    scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-    jScrollPane1.setViewportView(scrollPane);
-}
-
-
-
-
-
-
-    
-
-
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -421,7 +352,6 @@ private void addChatPanel() {
         updatelb = new javax.swing.JLabel();
         id = new javax.swing.JTextField();
         typetxt = new javax.swing.JTextField();
-        jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jPanel2 = new javax.swing.JPanel();
 
@@ -636,14 +566,6 @@ private void addChatPanel() {
         typetxt.setVisible(false);
         kGradientPanel1.add(typetxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 20, -1, -1));
 
-        jLabel1.setText("jLabel1");
-        jLabel1.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jLabel1MouseClicked(evt);
-            }
-        });
-        kGradientPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 20, -1, -1));
-
         jPanel1.add(kGradientPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 0, 1060, 60));
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -751,10 +673,6 @@ private void addChatPanel() {
         update.setVisible(true);
     }//GEN-LAST:event_updatelbMouseClicked
 
-    private void jLabel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel1MouseClicked
-        addChatPanel();
-    }//GEN-LAST:event_jLabel1MouseClicked
-
     public static void main(String args[]) { 
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -800,7 +718,6 @@ private void addChatPanel() {
     private javax.swing.JLabel deletelb;
     private com.formdev.flatlaf.ui.FlatMenuUI flatMenuUI1;
     private javax.swing.JTextField id;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;

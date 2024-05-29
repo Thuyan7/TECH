@@ -30,7 +30,7 @@ public class LaptopManager {
                 String image = rs.getString("image");
                 String description = rs.getString("description"); 
 
-                Laptop laptop = new Laptop(id,name, price, image, description);
+                Laptop laptop = new Laptop(id,name, price,image, description);
                 laptopList.add(laptop);
             }
 
@@ -105,7 +105,7 @@ public static Laptop getLaptopById(int id) {
             String image = rs.getString("image");
             String description = rs.getString("description");
 
-            laptop = new Laptop(id, name, price, image, description);
+            laptop = new Laptop(id, name, price,image, description);
         }
 
         DatabaseConnection.closeConnection(con);

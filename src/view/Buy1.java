@@ -37,6 +37,7 @@ public class Buy1 extends javax.swing.JFrame {
         initComponents();
         nameProduct.setText(productName);
         priceProduct.setText(price);
+        
     }
 
     /**

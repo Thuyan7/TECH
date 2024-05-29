@@ -4,11 +4,13 @@
  */
 package model;
 
+import java.io.Serializable;
+
 /**
  *
  * @author AN
  */
-public class Phone {
+public class Phone implements Serializable {
     private int id;
     private String name;
     private String price;
@@ -25,7 +27,7 @@ public class Phone {
                 
     }
 
-    public Phone(int id,String name, String price, String image, String description) {
+    public Phone(int id,String name, String price,String image, String description) {
         this.id = id;
         this.name = name;
         this.price = price;
